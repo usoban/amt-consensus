@@ -353,10 +353,10 @@ Družini.
 \begin{tabular}{l|p{6cm}|p{6cm}}
   {\bf kratica} & {\bf angleško} & {\bf slovensko} \\ \hline
   % after \\: \hline or \cline{col1-col2} \cline{col3-col4} ...
+  {\bf AMT} & asymmetric median tree & asimetrično srednje drevo \\
   {\bf MIS} & maximum independent set & največja neodvisna množica \\
   {\bf UPGMA} & unweighted pair group method with arithmetic mean & neuteženo gručanje s pomočjo aritmetične sredine \\
   {\bf CDAO} & comparative data analysis ontology  & ontologija s primerjavo podatkov \\
-  {\bf AMT} & asymmetric median tree & asimetrično srednje drevo \\
 \end{tabular}
 
 
@@ -394,11 +394,20 @@ This sample document presents an approach to typesetting your BSc thesis using \
 \pagestyle{fancy}
 
 \chapter{Uvod}
-Računska filogenetika je bila ena izmed prvih področij bioinformatike, katere cilj je, predvsem iz sekvenc DNK in RNK, odkriti evolucijska razmerja med različnimi taksonomskimi enotami. Mnoge računske filogenetske metode so bile razvite že v prejšnjem stoletju, vendar so nekatere v praktično uporabo prišle šele v zadnjem času zaradi eksponentnega povečanja računske moči. Ker različne metode ali pa celo ena sama metoda lahko proizvede več različnih filogenetskih dreves, mnogokrat želimo rezultate kombinirati v eno drevo in tako pridobiti eno teorijo o evolucijski zgodovini taksonomskih enot. 
+O evolucijskih razmerjih med živimi ogranizmi se je prvi spraševal Charles Darwin, ko je narisal znamenito "drevo življenja", prikazano na sliki (\ref{img-darwin-tree}). Vendar je Darwin lahko organizme razvrščal le glede na njihove morfološke lastnosti. Nato je prišlo do odkritja DNA in izuma računalnika in porodila se je ideja o računski filogenetiki, eni izmed prvih področij bioinformatike, katere cilj je, predvsem iz sekvenc DNA in RNA, odkriti evolucijska razmerja med različnimi taksonomskimi enotami.  Mnoge računske filogenetske metode so bile razvite že v prejšnjem stoletju, vendar so nekatere v praktično uporabo prišle šele v zadnjem času zaradi eksponentnega povečanja računske moči. Ker različne metode ali pa celo ena sama metoda lahko proizvede več različnih filogenetskih dreves, mnogokrat želimo rezultate kombinirati v eno drevo in tako pridobiti eno teorijo o evolucijski zgodovini taksonomskih enot. 
 
 Sem na pomoč priskočijo konsenzne metode, ki na podlagi različnih  kriterijev dele vhodnih dreves v končnem sestavljenem drevesu kombinirajo, ohranijo, ali zavržejo, s ciljem sestaviti drevo, katero kar se da dobro povzema informacije o evolucijski zgodovini, ki jih nosijo vhodna drevesa. Tekom konstrukcije konsenznega drevesa lahko metoda izračuna več različnih dreves, izbrano pa je tisto, ki uživa največjo podporo vhodnih dreves.
 
 V prvem delu diplomske naloge se bomo na kratko seznanili z najbolj uporabljenimi metodami računanja filogenetskih dreves, katerih produkt je nato vhod v algoritem za izračun konsenza, in nato obravnavali nekatere priljubljene konsenzne metode, kot so striktni konsenz, večinski konsenz in srednji konsenz (konsenz mediane). V drugem delu naloge se bomo osredotočili na novejšo konsenzno metodo, algoritem asimetričnega srednjega drevesa. Spoznali bomo samo idejo algoritma in navedli njegove prednosti ter slabosti napram bolj uveljavljenim metodam. Sledilo bo teoretično ozadje konstrukcije asimetričnega srednjega drevesa, ki pa bo osvetljeno s strani praktične implementacije algoritma v programski paket Biopython. Za konec bomo teoretične prednosti in slabosti preizkusili eksperimentalno z uporabo dveh metrik za merjenje razrešenosti končnega filogenetskega drevesa.
+
+\begin{figure}
+	\begin{center}
+		\includegraphics[scale=0.5, clip=true, trim=0 0 0 0]{gfx/darwin_tree.jpg}
+	\end{center}
+	\caption{"Drevo življenja", prva skica evolucijske zgodovine, narisana s strani Charlesa Darwina leta 1837\cite{cd}.}
+	\label{img-darwin-tree}
+\end{figure}
+
 
 \chapter{Filogenetske in konsenzne metode}
 
@@ -406,7 +415,7 @@ V diplomski nalogi se povečamo konsenzni metodi asimetričnega srednjega dreves
 
 \section{Filogenetske računske metode}
 
-Filogenetske računske metode lahko razdelimo na dve večji skupini, distančne in statistične metode. Vse kot vhod prejmejo DNK ali RNK sekvence taksonomskih enot, katerih evolucijsko zgodovino želimo rekonstruirati, kot izhod pa vrnejo eno ali več filogenetskih dreves, ki imajo konice (liste) označene z imeni taksonomskih enot. Nekatere metode so zmožne oceniti tudi dolžino vej drevesa, pri čemer dolžina veje predstavlja čas, ki je bil potreben za divergenco dveh taksonomskih enot iz skupnega prednika. Izračun dolžin vej sicer ni odvisen zgolj od izbrane metode, temveč tudi od izbranega modela molekularne ure. Primere treh filogenetskih dreves za pet taksonomskih enot prikazuje slika \ref{img-input-trees}. Drevesa na sliki imajo dolžine vseh vej enake, med sabo pa se razlikujejo po topologiji.
+Filogenetske računske metode lahko razdelimo na dve večji skupini, distančne in statistične metode. Vse kot vhod prejmejo DNA ali RNA sekvence taksonomskih enot, katerih evolucijsko zgodovino želimo rekonstruirati, kot izhod pa vrnejo eno ali več filogenetskih dreves, ki imajo konice (liste) označene z imeni taksonomskih enot. Nekatere metode so zmožne oceniti tudi dolžino vej drevesa, pri čemer dolžina veje predstavlja čas, ki je bil potreben za divergenco dveh taksonomskih enot iz skupnega prednika. Izračun dolžin vej sicer ni odvisen zgolj od izbrane metode, temveč tudi od izbranega modela molekularne ure. Primere treh filogenetskih dreves za pet taksonomskih enot prikazuje slika \ref{img-input-trees}. Drevesa na sliki imajo dolžine vseh vej enake, med sabo pa se razlikujejo po topologiji.
 
 \begin{figure}
 	\begin{center}
@@ -430,20 +439,20 @@ Konsenzne metode nad filogenetskimi drevesi so uporabljene po vsakem filogenetsk
 
 \begin{itemize}
 	\item kompatibilno drevo je sestavljeno iz delov vseh vhodnih dreves; ni nujno, da za vhodno množico dreves kompatibilno drevo dejansko tudi obstaja\cite{pw},
-	\item striktni konsenz je najbolj konzervativna metoda, saj v končnem drevesu ohrani le tiste dele dreves, ki so prisotni v vseh drevesih vhodne množice\cite{bw}. Primer striktnega konsenznega drevesa je prikazan na sliki \ref{img-strict-majority-amt-example},
-	\item večinski konsenz vsebuje le tiste dele drevesa, ki so prisotni v več kot polovici dreves vhodne množice\cite{bw}. Primer večinskega konsenznega drevesa je prikazan na sliki \ref{img-strict-majority-amt-example},
-	\item srednji konsenz oz. mediana je drevo, ki minimizira vsoto simetričnih razlik glede na drevesa v vhodni množici. Večinsko drevo je prav tako srednje drevo, kar pomeni, da vedno obstaja vsaj eno srednje drevo\cite{pw},
+	\item striktni konsenz je najbolj konzervativna metoda, saj v končnem drevesu ohrani le tiste dele dreves, ki so prisotni v vseh drevesih vhodne množice\cite{bw}. Primer striktnega konsenznega drevesa za vhodna drevesa iz slike \ref{img-input-trees} je prikazan na sliki \ref{img-strict-majority-amt-example},
+	\item večinski konsenz vsebuje le tiste dele drevesa, ki so prisotni v več kot polovici dreves vhodne množice\cite{bw}. Primer večinskega konsenznega drevesa za vhodna drevesa iz slike \ref{img-input-trees} je prikazan na sliki \ref{img-strict-majority-amt-example},
+	\item srednji konsenz oz. mediana je drevo, ki minimizira vsoto simetričnih razlik glede na drevesa v vhodni množici. Večinsko drevo je prav tako srednje drevo, kar pomeni, da vedno obstaja vsaj eno srednje drevo\cite{pw}.
 \end{itemize}
 
 \begin{figure}[h!]
 	\begin{center}
-		\includegraphics[scale=0.7, clip=true, trim=0 3cm 0 9mm]{gfx/strict_majority_amt_ex.pdf}
+		\includegraphics[scale=0.65, clip=true, trim=0 3cm 0 9mm]{gfx/strict_majority_amt_ex.pdf}
 	\end{center}
-	\caption{Na levi strani sta prikazana striktno in večinsko konsenzno drevo za vhodna drevesa iz slike \ref{img-input-trees}. Drevesi sta v tem primeru enaki. Na desni je prikazano asimetrično srednje drevo.}
+	\caption{Na levi strani je prikazano striktno in večinsko konsenzno drevo za vhodna drevesa iz slike \ref{img-input-trees}. Drevesi sta v tem primeru enaki. Na desni je za isto vhodno množico prikazano asimetrično srednje drevo.}
 	\label{img-strict-majority-amt-example}
 \end{figure}
 
-Večina konsenznih metod ignorira dolžine vej v vhodnih drevesih, tudi če so te navedene. Namen konsenznih metod je torej pridobiti topologijo drevesa, s katerim se strinjajo vsa vhodna drevesa, ne pa tudi usklajevanje divergentnih časov taksonomskih enot.  
+Večina konsenznih metod ignorira dolžine vej v vhodnih drevesih, tudi če so te navedene. Namen konsenznih metod je torej pridobiti topologijo drevesa, s katero se čim bolj strinjajo vhodna drevesa, ne pa tudi usklajevanje divergentnih časov taksonomskih enot in njihovih skupnih prednikov.  
 
 \chapter{Asimetrično srednje drevo}
 Metoda asimetričnega srednjega drevesa je nastala ob opažanju, da navadno srednje drevo kaznuje tiste dele dreves, ki ne nastopajo vsaj v polovici dreves vhodne množice, čeprav bi bilo smotrno, da se uporabi kar se da veliko informacije iz vseh vhodnih dreves\cite{pw}.
@@ -452,8 +461,8 @@ Metoda kot vhod prejme množico $k$ filogenetskih dreves $T = \left\{ {T_1, T_2,
 \begin{itemize}
 	\item drevesa pretvorimo v primerno reprezentacijo
 	\item poiščemo nekompatibilne pare poddreves in konstruiramo graf nekompatibilnosti
-	\item v grafu nekompatibilnosti poiščemo maksimalno neodvisno množico vozlišč
-	\item rekonstruiramo drevo iz vozlišč maksimalne neodvisne množice
+	\item v grafu nekompatibilnosti poiščemo največjo neodvisno množico vozlišč
+	\item rekonstruiramo drevo iz vozlišč največje neodvisne množice
 \end{itemize}
 
 \section{Kodiranje dreves}
@@ -526,23 +535,23 @@ Graf nekompatibilnosti vseh treh vhodnih dreves iz slike \ref{img-input-trees} j
 	\label{img-incompat-graph-example}
 \end{figure}
 
-\section{Maksimalna neodvisna množica}
+\section{Največja neodvisna množica}
 Graf nekompatibilnosti vsebuje vse informacije, ki jih potrebujemo za izbiro binarnih nizov, ki bodo prisotni v končnem filogenetskem drevesu. Vanj želimo vključiti kar se da veliko informacij, prisotnih v drevesih vhodne množice $T$. Najprej je potrebno zagotoviti, da vključimo binarne nize, ki so skupni vsem vhodnim drevesom $T_i$ (drevo, ki bi vsebovalo le te binarne nize, bi bilo striktno konsenzno drevo). Obenem želimo vključiti čimveč preostalih binarnih nizov, vendar ne takih, da bi bil katerikoli par nekompatibilen. 
 
-Matematično orodje, ki nam iz grafa $I(V, E)$ omogoča izbiro vozlišč, ki paroma ne bodo kršile pogoja nekompatibilnosti, se imenuje neodvisna množica (angl. independent set). Neodvisna množica grafa je katerakoli množica vozlišč $V_{Indep} \subseteq V$, med katerimi ni medsebojnih povezav. Maksimalna neodvisna množica grafa (angl. maximum independent set - MIS) je tista neodvisna množica $V_{MIS} \subseteq V$, ki vsebuje največ vozlišč. Potrebno je povdariti, da za nek graf $I(V, E)$ lahko obstaja več različnih $V_{MIS}$. Ker vozlišča $V_{MIS}$ predstavljajo binarne nize oz. klade končnega drevesa, to pomeni, da za en graf $I(V, E)$ lahko obstaja več asimetričnih srednjih dreves.
+Matematično orodje, ki nam iz grafa $I(V, E)$ omogoča izbiro vozlišč, ki paroma ne bodo kršile pogoja nekompatibilnosti, se imenuje neodvisna množica (angl. independent set). Neodvisna množica grafa je katerakoli množica vozlišč $V_{Indep} \subseteq V$, med katerimi ni medsebojnih povezav. Največja neodvisna množica grafa (angl. maximum independent set - MIS) je tista neodvisna množica $V_{MIS} \subseteq V$, ki vsebuje največ vozlišč. Potrebno je povdariti, da za nek graf $I(V, E)$ lahko obstaja več različnih $V_{MIS}$. Ker vozlišča $V_{MIS}$ predstavljajo binarne nize oz. klade končnega drevesa, to pomeni, da za en graf $I(V, E)$ lahko obstaja več asimetričnih srednjih dreves.
 
 \begin{figure}
 	\begin{center}
 		\includegraphics[scale=0.46]{gfx/incompat_graphs_pair.png}
 	\end{center}
-	\caption{Dve različni maksimalni neodvisni množici za graf nekompatibilnosti iz slike \ref{img-incompat-graph-example}. Na danem grafu sicer obstajajo štiri maksimalne neodvisne množice.}
+	\caption{Dve različni največji neodvisni množici za graf nekompatibilnosti iz slike \ref{img-incompat-graph-example}. Na danem grafu sicer obstajajo štiri največje neodvisne množice.}
 	\label{img-mis-examples}
 \end{figure}
 
-Vozlišča grafa $I(V, E)$, katerega sestavimo iz $k$ dreves vhodne množice $T$, sestavljajo neodvisne množice $V_1, V_2, ..., V_k$. Vozlišča znotraj ene množice nikoli niso medsebojno povezana, saj njihovi pripadajoči binarni nizi pripadajo istemu drevesu. Vozlišči iz različnih množic pa lahko tvorita povezavo, v kolikor sta nekompatibilni. Tak graf imenujemo tudi k-partitni graf. Za bipartitne grafe obstaja trivialen polinomski algoritem s časovno zahtevnostjo $O(n^2)$, v splošnem pa problem maksimalne neodvisne množice za k-partitne grafe sodi v razred NP-težkih algoritmov\cite{pw}. 
+Vozlišča grafa $I(V, E)$, katerega sestavimo iz $k$ dreves vhodne množice $T$, sestavljajo neodvisne množice $V_1, V_2, ..., V_k$. Vozlišča znotraj ene množice nikoli niso medsebojno povezana, saj njihovi pripadajoči binarni nizi pripadajo istemu drevesu. Vozlišči iz različnih množic pa lahko tvorita povezavo, v kolikor sta nekompatibilni. Tak graf imenujemo tudi k-partitni graf. Za bipartitne grafe obstaja trivialen polinomski algoritem s časovno zahtevnostjo $O(n^2)$, v splošnem pa problem največje neodvisne množice za k-partitne grafe sodi v razred NP-težkih algoritmov\cite{pw}. 
 
 \section{Rekonstrukcija drevesa}
-S tem, ko smo določili maksimalno neodvisno množico $V_{MIS}$ grafa $I(V, E)$, smo določili klade končnega drevesa, katerega strukturo pa je potrebno še rekonstruirati iz izbranih binarnih nizov. Problem rekonstrukcije evolucijske zgodovine $n$ taksonomskih enot iz njihovih binarnih nizov je dobro znan in se imenuje problem filogenije. Zanj obstaja algoritem s časovno kompleksnostjo $O(nm)$, pri čemer je $n$ število taksonomskih enot, $m$ pa število binarnih nizov v maksimalni neodvisni množici\cite{gd}.
+S tem, ko smo določili največjo neodvisno množico $V_{MIS}$ grafa $I(V, E)$, smo določili klade končnega drevesa, katerega strukturo pa je potrebno še rekonstruirati iz izbranih binarnih nizov. Problem rekonstrukcije evolucijske zgodovine $n$ taksonomskih enot iz njihovih binarnih nizov je dobro znan in se imenuje problem filogenije. Zanj obstaja algoritem s časovno kompleksnostjo $O(nm)$, pri čemer je $n$ število taksonomskih enot, $m$ pa število binarnih nizov v največji neodvisni množici\cite{gd}.
 
 Najprej kreiramo matriko M dimenzij $n×m$. Binarne nize, ki pripadajo vozliščem množice $V_{MIS}$ kot stolpce zložimo v matriko $M$. Nato stolpce interpretiramo kot števila v binarnem zapisu, jih pretvorimo v desetiško obliko in sortiramo. Odstranimo stolpce s podvojeno vrednostjo, tako da ostanejo le stolpci z unikatnimi števili. S tem pridobimo matriko $M'$.
 
@@ -550,7 +559,7 @@ Najprej kreiramo matriko M dimenzij $n×m$. Binarne nize, ki pripadajo vozlišč
 	\begin{center}
 		\includegraphics[scale=0.8, clip=true, trim=2.9cm 17cm 3cm 5cm]{gfx/tree_reconstruction_m.pdf}
 	\end{center}
-	\caption{Primer izračuna matrike $M'$, množice parov indeksov $E$ in vseh vrednosti $P(i, j)$ ter $P(j)$ za prvo maksimalno neodvisno množico iz slike \ref{img-mis-examples}. Ker enačba \ref{eq:9} v tem primeru velja, iz matrike $M'$ lahko zgradimo filogenetsko drevo.}
+	\caption{Primer izračuna matrike $M'$, množice parov indeksov $E$ in vseh vrednosti $P(i, j)$ ter $P(j)$ za prvo največjo neodvisno množico iz slike \ref{img-mis-examples}. Ker enačba \ref{eq:9} v tem primeru velja, iz matrike $M'$ lahko zgradimo filogenetsko drevo.}
 	\label{img-reconstruct-m}
 \end{figure}
 
@@ -579,7 +588,7 @@ Ko imamo poračunane vse vrednosti $P(i, j)$, lahko za vsak $j \in I_j$ poišče
 
 V kolikor velja enačba (\ref{eq:9}), potem za matriko $M'$ obstaja filogenetsko drevo\cite{gd}. V tem primeru se lahko lotimo njegove konstrukcije. Najprej ustvarimo graf, v katerega kot vozlišča dodamo koren bodočega drevesa $r$ in za vsak $j \in I_j$ svoje vozlišče $v_j$. Nato za vsako vozlišče $v_j$, za katerega velja $P(j) > 0$, ustvarimo povezavo $(v_{P(j)}, v_j)$ in povezavo označimo z $j$. Vsa preostala vozlišča $v_j$, za katere velja $P(j) = 0$, povežemo s korenom drevesa s pomočjo povezave $(r, v_j)$, in prav tako označimo z $j$. Primer takega grafa, konstruiranega za matriko $M'$ iz slike \ref{img-reconstruct-m} je prikazan na levi strani slike \ref{img-reconstruct-1}. Tak graf je že drevo, vendar še ne filogenetsko.
 
-Preden konstruirano drevo postane filogenetsko drevo, moramo razrešiti oznake na povezavah. Razreševanja se lotimo po vrsticah matrike $M'$, saj vsaka vrstica pravzaprav predstavlja eno taksonomsko enoto. Za vsak $i \in I_i$ najdemo maksimalni $j$, za katerega velja $M'(i, j) = 1$. Dobljeni $j$ nam predstavlja oznako povezave, na koncu katere je prisoten list, kateremu dodelimo oznako taksonomske enote trenutne vrstice $i$. To storimo za vse vrstice, s čimer označimo vse liste. Kot prikazuje primer dokončanega drevesa na desni strani slike \ref{img-reconstruct-1}, za konec notranjim vozliščem in povezavam odstranimo oznake. S tem smo prišli do končnega filogenetskega drevesa, ki ga označimo s $\tau$.  
+Preden konstruirano drevo postane filogenetsko drevo, moramo razrešiti oznake na povezavah. Razreševanja se lotimo po vrsticah matrike $M'$, saj vsaka vrstica pravzaprav predstavlja eno taksonomsko enoto. Za vsak $i \in I_i$ najdemo največji $j$, za katerega velja $M'(i, j) = 1$. Dobljeni $j$ nam predstavlja oznako povezave, na koncu katere je prisoten list, kateremu dodelimo oznako taksonomske enote trenutne vrstice $i$. To storimo za vse vrstice, s čimer označimo vse liste. Kot prikazuje primer dokončanega drevesa na desni strani slike \ref{img-reconstruct-1}, za konec notranjim vozliščem in povezavam odstranimo oznake. S tem smo prišli do končnega filogenetskega drevesa, ki ga označimo s $\tau$.  
 
 \begin{figure}
 	\begin{center}
@@ -590,7 +599,7 @@ Preden konstruirano drevo postane filogenetsko drevo, moramo razrešiti oznake n
 \end{figure}
 
 \section{Vrednost asimetričnega srednjega drevesa}
-Omenili smo že, da za en graf nekompatibilnosti lahko obstaja več maksimalnih neodvisnih mnnožic in da to pomeni, da lahko sestavimo več različnih asimetričnih srednjih dreves. Prvotni razlog za uporabo konsenznih metod je iz večih dreves pridobiti eno drevo, zato potrebujemo metriko, s pomočjo katere se bomo lahko odločili za eno, najbolj podprto drevo.  
+Omenili smo že, da za en graf nekompatibilnosti lahko obstaja več največjih neodvisnih mnnožic in da to pomeni, da lahko sestavimo več različnih asimetričnih srednjih dreves. Prvotni razlog za uporabo konsenznih metod je iz večih dreves pridobiti eno drevo, zato potrebujemo metriko, s pomočjo katere se bomo lahko odločili za eno, najbolj podprto drevo.  
 
 Najprej uvedemo utež binarnega niza $w(c_e)$ (\ref{eq:10}), ki je preprosto število dreves v vhodni množici $T$, ki vsebujejo binarni niz $c_e$. Vrednost asmetričnega srednjega drevesa $\tau$ glede na vhodno množico $T$ je določena (\ref{eq:11}) kot vsota uteži binarnih nizov, ki so prisotni v asimetričnem srednjem drevesu, vendar niso prisotni v vseh vhodnih drevesih (oz. striktnem konsenznem drevesu)\cite{pw}.
 
@@ -602,17 +611,17 @@ Najprej uvedemo utež binarnega niza $w(c_e)$ (\ref{eq:10}), ki je preprosto št
 Najboljše najdeno asimetrično srednje drevo je tisto, ki maksimizira dano vsoto uteži \ref{eq:11}.
 
 \section{Aproksimacijski algoritmi}
-Ker je problem konstrukcije asimetričnega srednjega drevesa polinomsko prevedljiv na problem maksimalne neodvisne množice\cite{pw} in zato za več kot dve drevesi sodi v razred NP-težkih problemov, je izvajanje algoritma prepočasno, če imamo v vhodni množici $T$ veliko dreves. Zato si bomo ogledali dva aproksimacijska algoritma, ki imata polinomsko časovno zahtevnost.
+Ker je problem konstrukcije asimetričnega srednjega drevesa polinomsko prevedljiv na problem največje neodvisne množice\cite{pw} in zato za več kot dve drevesi sodi v razred NP-težkih problemov, je lahko izvajanje algoritma prepočasno, če imamo v vhodni množici $T$ veliko dreves. Zato si bomo ogledali dva aproksimacijska algoritma, ki imata polinomsko časovno zahtevnost.
 
 Prvi, $\frac{2}{k}$-aproksimacijski algoritem, je enostaven. Za vsak par dreves $T_i, T_j \in T$ izračunamo asimetrično srednje drevo $\tau_{ij}$ in izberemo tistega, ki maksimizira vrednostno funkcijo $value(T, \tau_{ij})$. Ker je tako asimetrično srednje drevo sestavljeno iz dveh dreves, posledično lahko vsebuje le klade, ki so prisotne v teh dveh drevesih.
 
-V kolikor imajo drevesa vhodne množice $T$ veliko skupnih klad, je primernejši drugi algoritem. Naj bo $V^* \subseteq V$ podmnožica vozlišč grafa nekompatibilnosti $I(V, E)$, in sicer tistih, ki so skupna vsem drevesom. Takih vozlišč v naslednjem koraku ne potrebujemo, saj niso povezana z nobenim drugim vozliščem. Nato izračunamo maksimalno ujemanje (angl. maximum matching) v grafu $I(V - V^*, E)$, s čimer pridobimo množico robov $E_{M} \subseteq E$, ki nimajo skupnih vozlišč\cite{mgt}. Vozlišča $V_{M}$, ki so krajišča robov iz množice $E_{M}$, odstranimo iz množice $V$ in ostanejo nam le neujemajoča vozlišča $V_{N} = V - V_{M}$. Primer iskanja množice $V_N$ je prikazan na sliki \ref{img-maxmatch}. Iz binarnih nizov, pripadajočih vozliščem množice $V_{N}$, rekonstruiramo asimetrično srednje drevo po običanjem postopku. Tako drevo, za razliko od drevesa izračunanega s pomočjo prvega aproksimacijskega algoritma, lahko vsebuje klade iz večih dreves vhodne množice hkrati\cite{pw}. 
+V kolikor imajo drevesa vhodne množice $T$ veliko skupnih klad, je primernejši drugi algoritem. Naj bo $V^* \subseteq V$ podmnožica vozlišč grafa nekompatibilnosti $I(V, E)$, in sicer tistih, ki so skupna vsem drevesom. Takih vozlišč v naslednjem koraku ne potrebujemo, saj niso povezana z nobenim drugim vozliščem. Nato izračunamo največje ujemanje (angl. maximum matching) v grafu $I(V - V^*, E)$, s čimer pridobimo množico robov $E_{M} \subseteq E$, ki nimajo skupnih vozlišč\cite{mgt}. Vozlišča $V_{M}$, ki so krajišča robov iz množice $E_{M}$, odstranimo iz množice $V$ in ostanejo nam le neujemajoča vozlišča $V_{N} = V - V_{M}$. Primer iskanja množice $V_N$ je prikazan na sliki \ref{img-maxmatch}. Iz binarnih nizov, pripadajočih vozliščem množice $V_{N}$, rekonstruiramo asimetrično srednje drevo po običanjem postopku. Tako drevo, za razliko od drevesa izračunanega s pomočjo prvega aproksimacijskega algoritma, lahko vsebuje klade iz večih dreves vhodne množice hkrati\cite{pw}. 
 
 \begin{figure}
 	\begin{center}
 		\includegraphics[scale=0.65, clip=true, trim=2cm 1cm 1cm 2cm]{gfx/maxmatch_graph.pdf}
 	\end{center}
-	\caption{Primer računanja bitnih nizov asimetričnega srednjega drevesa s pomočjo maksimalnega ujemanja. Robovi, ki spadajo v množico maksimalnega ujemanja $E_{M}$ so obarvani modro, njihova krajišča pa rdeče. Vsi bitni nizi, ki so obarvani črno, sestavljajo končno drevo.}
+	\caption{Primer računanja bitnih nizov asimetričnega srednjega drevesa s pomočjo največjega ujemanja. Robovi, ki spadajo v množico največjega ujemanja $E_{M}$ so obarvani modro, njihova krajišča pa rdeče. Vsi bitni nizi, ki so obarvani črno, sestavljajo končno drevo.}
 	\label{img-maxmatch}
 \end{figure}
 
@@ -635,7 +644,7 @@ Izračun konsenznih filogenetskih dreves je mogoč s pomočjo podmodula $Bio.Phy
 \section{Podrobnosti implementacije}
 Glavna entiteta, ki je nastopala v obravnavi metode asimetričnega srednjega drevesa je bil bitni niz. Zato je pomembno, da zanj uporabimo primerno hitro podatkovno strukturo. Razred, ki podatkovno strukturo že implementira se imenuje $\_BitString$, prebiva pa v podmodulu $Bio.Phylo.Consensus$. $\_BitString$ razširja Pythonovo vgrajeno podatkovno strukturo $String$, zato ga lahko uporabljamo na enak način. Med operatorji, ki jih lahko izvajamo nad podatkovno strukturo, so konjunkcija, disjunkcija in ekskluzivna disjunkcija nad posameznimi mesti, vsebuje pa tudi metodi za preverjanje vsebovanosti enega bitnega niza v drugem in preverjanje kompatibilnosti dveh binarnih nizov. 
 
-Modul $Bio.Phylo$ za izrisovanje filogenetskih dreves uporablja paket networkx\footnote{\url{https://networkx.github.io/}}. Ta poleg samega izrisovanja ponuja tudi konstrukcijo grafov in njihovo nadaljno manipulacijo. Na grafu zmore izračunati aproksimacijo maksimalne neodvisne množice, a se s tem nismo mogli zadovoljiti, saj je bila aproksimacija že za majhna vhodna drevesa preveč nenatančna, da bi dobili uporaben rezultat. Zato smo za konstrukcijo grafa in iskanje maksimalne neodvisne množice vozlišč izbrali paket igraph\footnote{\url{http://igraph.org/python/}}, ki zmore najti vse maksimalne neodvisne množice v danem grafu nekompatibilnosti. Čeprav smo s tem vnesli dodatno odvisnost od zunanjih paketov, lahko odločitev utemeljimo s precej večjo hitrostjo implementacije algoritmov paketa igraph v primerjavi z lastno implementacijo v programskem jeziku Python. Pri uporabi druge aproksimacijske metode za izračun asimetričnega srednjega drevesa pa ne računamo maksimalne neodvisne množice, temveč maksimalno ujemanje, za kar smo uporabili paket networkx, saj paket igraph zmore najti maksimalno ujemanje le na bipartitnih grafih, naš graf inkompatibilnosti pa ima v splošnem lahko poljubno število particij.
+Modul $Bio.Phylo$ za izrisovanje filogenetskih dreves uporablja paket networkx\footnote{\url{https://networkx.github.io/}}. Ta poleg samega izrisovanja ponuja tudi konstrukcijo grafov in njihovo nadaljno manipulacijo. Na grafu zmore izračunati aproksimacijo največje neodvisne množice, a se s tem nismo mogli zadovoljiti, saj je bila aproksimacija že za majhna vhodna drevesa preveč nenatančna, da bi dobili uporaben rezultat. Zato smo za konstrukcijo grafa in iskanje največje neodvisne množice vozlišč izbrali paket igraph\footnote{\url{http://igraph.org/python/}}, ki zmore najti vse največje neodvisne množice v danem grafu nekompatibilnosti. Čeprav smo s tem vnesli dodatno odvisnost od zunanjih paketov, lahko odločitev utemeljimo s precej večjo hitrostjo implementacije algoritmov paketa igraph v primerjavi z lastno implementacijo v programskem jeziku Python. Pri uporabi druge aproksimacijske metode za izračun asimetričnega srednjega drevesa pa ne računamo največje neodvisne množice, temveč največje ujemanje, za kar smo uporabili paket networkx, saj paket igraph zmore najti največje ujemanje le na bipartitnih grafih, naš graf inkompatibilnosti pa ima v splošnem lahko poljubno število particij.
 
 Za rekonstrukcijo drevesa smo potrebovali orodje, ki je zmožno dela z matrikami. Ker je paket Biopython že odvisen od paketa numpy\footnote{\url{http://www.numpy.org/}}, je ta bil logična izbira. Med kreiranjem matrike je bilo potrebno binarne nize pretvoriti v stolpce matrike. Za to potrebo smo razredu \_BitString dodali metodo $to\_numpy()$, katera niz ničel in enic pretvori v binarni vektor tipa $numpy.ndarray$ z eno dimenzijo. Za potrebe sortiranja smo razredu $\_BitString$ dodali še metodo $\_\_int\_\_()$, ki izračuna desetiško vrednost binarnega niza.
 
@@ -657,7 +666,7 @@ def amt_consensus(trees, method='no_approx')
     method    & niz                             &  ~                                         & Parameter za izbiro metode izračuna.  \tabularnewline
     ~         & ~                               & {\it no\_approx}                            & Izračun točnega drevesa.  \tabularnewline
     ~         & ~                               & {\it bi\_approx}                            & Izračun iz največ dveh dreves.  \tabularnewline
-    ~         & ~                               & {\it maxmatch\_approx}                      & Izračun s pomočjo maksimalnega ujemanja.  \tabularnewline
+    ~         & ~                               & {\it maxmatch\_approx}                      & Izračun s pomočjo največjega ujemanja.  \tabularnewline
     \hline
     \end{tabular}
     }
@@ -751,7 +760,7 @@ Tabela (\ref{table-eval-1}) prikazuje razrešenost in RF vrednosti asimetričneg
 	\begin{center}
 		\includegraphics[scale=0.65, clip=true, trim=1.5cm 1.5cm 1cm 0.8cm]{gfx/eval_gfx.pdf}
 	\end{center}
-	\caption{Konsenzna drevesa, zgrajena iz množice dreves na sliki (\ref{img-eval-input}). Oznaka Bi-AMT označuje približek asimetričnega srednjega drevesa zgrajenega iz dveh vhodnih dreves, MM-AMT pa aproksimirano drevo zgrajeno s pomočjo maksimalnega ujemanja.}
+	\caption{Konsenzna drevesa, zgrajena iz množice dreves na sliki (\ref{img-eval-input}). Oznaka Bi-AMT označuje približek asimetričnega srednjega drevesa zgrajenega iz dveh vhodnih dreves, MM-AMT pa aproksimirano drevo zgrajeno s pomočjo največjega ujemanja.}
 	\label{img-eval-result}
 \end{figure}
 
@@ -794,7 +803,7 @@ Ker večina klad ni prisotna v več kot polovici vhodnih dreves, večinoma pa so
 	\begin{center}
 		\includegraphics[scale=0.6, clip=true, trim=1.5cm 1.5cm 1cm 0.8cm]{gfx/eval_gfx_2.pdf}
 	\end{center}
-	\caption{Konsenzna drevesa, zgrajena iz množice dreves na sliki (\ref{img-eval-input-2}). Oznaka Bi-AMT označuje približek asimetričnega srednjega drevesa zgrajenega iz dveh vhodnih dreves, MM-AMT pa aproksimirano drevo zgrajeno s pomočjo maksimalnega ujemanja. Striktno konsenzno drevo ni prikazano, ker v tem primeru ne obstaja.}
+	\caption{Konsenzna drevesa, zgrajena iz množice dreves na sliki (\ref{img-eval-input-2}). Oznaka Bi-AMT označuje približek asimetričnega srednjega drevesa zgrajenega iz dveh vhodnih dreves, MM-AMT pa aproksimirano drevo zgrajeno s pomočjo največjega ujemanja. Striktno konsenzno drevo ni prikazano, ker v tem primeru ne obstaja.}
 	\label{img-eval-result-2}
 \end{figure}
 
@@ -846,12 +855,15 @@ Najpomembnejši rezultat dela je zagotovo prva znana implementacija konsenzne me
 
 Kot smo pokazali na treh vhodnih množicah, asimetrično srednje drevo ni nujno tisto, ki drevesa vhodne množice povzema najbolje. Prav tako kot z izbiro aproksimacijske metode tudi tukaj velja, da je izbira konsenzne metode odvisna predvsem od predhodnega poznavanja lastnosti dreves vhodne množice. V kolikor ta vsebujejo veliko število nekompatibilnih parov poddreves, potem je izbira metode asimetričnega srednjega drevesa smotrna, v nasprotnem primeru pa lahko že večinsko ali adamovo konsenzno drevo da primerljive, če ne celo boljše rezultate.
 
-Kar se tiče razrešenosti dreves, je v naših testnih primerih asimetrično srednje drevo vedno bilo polno razrešeno in tako ponujalo največ informacije o evolucijski zgodovini, s čimer je prekašalo vse ostale metode. Tega sicer ne moremo trditi za obe aproksimacijski metodi. Metoda z izračunom maksimalnega ujemanja je po razrešenosti v nekaterih primerih bila primerljiva zgolj s striktnim konsenznim drevesom, metoda z izračunom drevesa iz dveh vhodnih dreves pa je ob dobri razrešenosti običajno proizvedla drevo, ki se slabše ujema z vhodnimi drevesi.
+Kar se tiče razrešenosti dreves, je v naših testnih primerih asimetrično srednje drevo vedno bilo polno razrešeno in tako ponujalo največ informacije o evolucijski zgodovini, s čimer je prekašalo vse ostale metode. Tega sicer ne moremo trditi za obe aproksimacijski metodi. Metoda z izračunom največjega ujemanja je po razrešenosti v nekaterih primerih bila primerljiva zgolj s striktnim konsenznim drevesom, metoda z izračunom drevesa iz dveh vhodnih dreves pa je ob dobri razrešenosti običajno proizvedla drevo, ki se slabše ujema z vhodnimi drevesi.
 
 Možnosti za izboljšave vidimo predvsem pri aproksimacijskih algoritmih. Nad drevesi, izračunanimi s pomočjo prvega aproksimacijskega algoritma, bi npr. lahko ponovno izračunali konsenzna drevesa in izbrali najboljšega. Prav tako so potrebne dodatne študije, s katerimi bi identificirali lastnosti dreves vhodne množice, za da metoda asimetričnega srednjega drevesa boljše rezultate.
 
 
 \begin{thebibliography}{99}
+
+\bibitem{cd}
+C.\ Darwin. ``Notebook B: Transmutation of species'', str. 36, 1837-1838.
 
 \bibitem{pw}
 C.\ Phillips, T.\ J.\ Warnow. ``The asymmetric median tree - A new model for building consensus trees'', {\it Discrete Applied Mathematics}, št.\ 71, str.\ 311–335, 1996.
@@ -880,9 +892,6 @@ dostopno na: \\ http://biopython.org/DIST/docs/tutorial/Tutorial.html
 Matching (Graph Theory)
 dostopno na: \\ http://en.wikipedia.org/wiki/Matching\_(graph\_theory)
 
-\bibitem{iset}
-Independent set (Graph Theory)
-dostopno na: \\ http://en.wikipedia.org/wiki/Independent\_set\_(graph\_theory)
 
 \end{thebibliography}
 
