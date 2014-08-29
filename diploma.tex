@@ -484,20 +484,20 @@ Izbira predstavitve drevesa je pomembna za njihovo nadaljno manipulacijo. Izhaja
 	\label{eq:1}
 \end{align}
 
-Vsak rob drevesa določa poddrevo, vendar nas ne bo zanimala celotna struktura poddreves, temveč zgolj njihovi listi. Liste poddrevesa z drugo besedo imenujemo klada (angl. clade). Vsako klado drevesa lahko predstavimo z binarnim nizom, ki ga dobimo z uporabo preslikave \ref{eq:2}, pri čemer je potrebno povdariti, da je vrstni red posameznih znakov v binarnem nizu pomemben, saj je na vsak znak vezan pomen; vsako posamezno mesto v nizu pripada enemu izmed listov drevesa, znak na tem mestu pa zgolj indicira prisotnost ali neprisotnost lista oz. taksonomske enote v kladi, kodirani z binarnim nizom.
+Vsak rob drevesa določa poddrevo, to pa predstavlja skupnega prednika s svojimi potomci. Takemu poddrevesu pravimo tudi klad (angl. clade). Ne bo nas zanimala celotna struktura poddreves, temveč zgolj njihovi listi. Vsak klad drevesa lahko predstavimo z binarnim nizom, ki ga dobimo z uporabo preslikave \ref{eq:2}, pri čemer je potrebno povdariti, da je vrstni red posameznih znakov v binarnem nizu pomemben, saj je na vsak znak vezan pomen; vsako posamezno mesto v nizu pripada enemu izmed listov drevesa, znak na tem mestu pa zgolj indicira prisotnost ali neprisotnost lista oz. taksonomske enote v kladu, kodiranem z binarnim nizom.
 
 
 \begin{align}
 	c_e = \left\{ c(e, s): s \in S \right\} \label{eq:2}
 \end{align}
 
-V kolikor binarne nize vseh klad drevesa zberemo v množico (\ref{eq:3}), nam $C(T_i)$ določa kodiranje celotnega drevesa $T_i$. Primer dveh takih množic je prikazan na sliki \ref{img-bistring-trees-example}, kjer so binarni nizi prikazani na vejah, ki vodijo do korenov klad.
+V kolikor binarne nize vseh kladov drevesa zberemo v množico (\ref{eq:3}), nam $C(T_i)$ določa kodiranje celotnega drevesa $T_i$. Primer dveh takih množic je prikazan na sliki \ref{img-bistring-trees-example}, kjer so binarni nizi prikazani na vejah, ki vodijo do korenov kladov.
 
 \begin{align}
 	C(T_i) = \left\{ c_e : e \in E(T_i) \right\} \label{eq:3}
 \end{align}
 
-Kodiranje sedaj lahko izvedemo nad vsemi drevesi vhodne množice $T$, pri čemer je ponovno potrebno povdariti, da se pomen posameznih mest v binarnih nizih med različnimi drevesi ne sme spreminjati, saj sicer klad iz različnih dreves ne bi mogli medsebojno primerjati. 
+Kodiranje sedaj lahko izvedemo nad vsemi drevesi vhodne množice $T$, pri čemer je ponovno potrebno povdariti, da se pomen posameznih mest v binarnih nizih med različnimi drevesi ne sme spreminjati, saj sicer kladov iz različnih dreves ne bi mogli medsebojno primerjati. 
 
 \begin{figure}
 	\begin{center}
@@ -508,7 +508,7 @@ Kodiranje sedaj lahko izvedemo nad vsemi drevesi vhodne množice $T$, pri čemer
 \end{figure}
 
 \section{Kompatibilnost binarnih nizov} 
-Za konstrukcijo grafa nekompatibilnosti najprej potrebujemo kriterij kompatibilnosti klad oz. binarnih nizov, ki jih kodirajo. Za potrebe lažje predstavitve kompatibilnosti za vsak binarni niz $c_e$ definiramo množico $\phi(c_e)$ (\ref{eq:4}), ki vsebuje oznake taksonomskih enot, prisotnih v kladi oz. njenem pripadajočem binarnem nizu $c_e$. 
+Za konstrukcijo grafa nekompatibilnosti najprej potrebujemo kriterij kompatibilnosti kladov oz. binarnih nizov, ki jih kodirajo. Za potrebe lažje predstavitve kompatibilnosti za vsak binarni niz $c_e$ definiramo množico $\phi(c_e)$ (\ref{eq:4}), ki vsebuje oznake taksonomskih enot, prisotnih v kladu oz. njegovem pripadajočem binarnem nizu $c_e$. 
 
 \begin{align}
 	\phi(c_e) = c_e^{-1}(1) = \left\{ s \in S: c(e, s) = 1 \right\} \label{eq:4} \\
@@ -525,12 +525,12 @@ Za konstrukcijo grafa nekompatibilnosti najprej potrebujemo kriterij kompatibiln
 	\label{img-venn-compatibility}
 \end{figure}
 
-V kolikor kompatibilnost klad interpretiramo v smislu filogenetskega drevesa, potem posamezna klada predstavlja poddrevo s korenom, ki je notranje vozlišče drevesa $T_i$. Notranje vozlišče filogenetskega drevesa predstavlja skupnega prednika vsem vozliščem v poddrevesu pod njim. Nekompatibilni sta tisti poddrevesi, ki trdita, da se je iz obeh skupnih prednikov razvilo nekaj skupnih taksonomskih enot, a je hkrati v vsaj enem poddrevesu prisotna taksonomska enota, ki je v drugem poddrevesu ni. V tem primeru poddrevesi torej ponujata nasprotujoči si informaciji o evolucijski zgodovini. 
+V kolikor kompatibilnost kladov interpretiramo v smislu filogenetskega drevesa, potem posamezen klad predstavlja poddrevo s korenom, ki je notranje vozlišče drevesa $T_i$. Notranje vozlišče filogenetskega drevesa predstavlja skupnega prednika vsem vozliščem v poddrevesu pod njim. Nekompatibilni sta tisti poddrevesi, ki trdita, da se je iz obeh skupnih prednikov razvilo nekaj skupnih taksonomskih enot, a je hkrati v vsaj enem poddrevesu prisotna taksonomska enota, ki je v drugem poddrevesu ni. V tem primeru poddrevesi torej ponujata nasprotujoči si informaciji o evolucijski zgodovini. 
 
 \section{Graf nekompatibilnosti}
 Z uporabo kriterija nekompatibilnosti binarnih nizov lahko zgradimo graf nekompatibilnosti $I(V_1, V_2, ..., V_k, E) = I(V, E)$. Vsaka množica vozlišč $V_i$ predstavlja binarne nize $C(T_i)$, povezave v grafu pa vzpostavimo med tistimi vozlišči, katerih pripadajoči binarni nizi so med sabo nekompatibilni~\cite{pw}. S povezovanjem vozlišč označimo binarne nize, ki v končnem drevesu skupaj ne morejo biti prisotni, sicer bi filogenetsko drevo podajalo dvoumne informacije o evolucijski zgodovini. 
 
-Graf nekompatibilnosti vseh treh vhodnih dreves iz slike \ref{img-input-trees} je prikazan na sliki \ref{img-incompat-graph-example}. V prvem in drugem drevesu sta medsebojno nekompatibilni kladi $(Gamma, Alpha)$ in $(Gamma, Beta)$. Drevesi ponujata nasprotujoči si informaciji - prvo za najbolj sorodno taksonomski enoti $Gamma$ ponuja taksonomsko enoto $Alpha$, drugo pa taksonomsko enoto $Beta$. Prvo in drugo drevo imata medsebojno kompatibilni kladi $(Epsilon, Delta)$, ki pa sta nekompatibilni s klado $(Delta, Gamma, Beta, Alpha)$ iz tretjega vhodnega drevesa. Medtem ko prvo in drugo drevo trdita, da imata taksonomski enoti $Epsilon$ in $Delta$ neposrednega skupnega prednika, tretje drevo temu nasprotuje.
+Graf nekompatibilnosti vseh treh vhodnih dreves iz slike \ref{img-input-trees} je prikazan na sliki \ref{img-incompat-graph-example}. V prvem in drugem drevesu sta medsebojno nekompatibilna klada $(Gamma, Alpha)$ in $(Gamma, Beta)$. Drevesi ponujata nasprotujoči si informaciji - prvo za najbolj sorodno taksonomski enoti $Gamma$ ponuja taksonomsko enoto $Alpha$, drugo pa taksonomsko enoto $Beta$. Prvo in drugo drevo imata medsebojno kompatibila klada $(Epsilon, Delta)$, ki pa sta nekompatibilna s kladom $(Delta, Gamma, Beta, Alpha)$ iz tretjega vhodnega drevesa. Medtem ko prvo in drugo drevo trdita, da imata taksonomski enoti $Epsilon$ in $Delta$ neposrednega skupnega prednika, tretje drevo temu nasprotuje.
 
 \begin{figure}
 	\begin{center}
@@ -582,9 +582,9 @@ Naj bo $I_i$ množica indeksov vrstic, $I_j$ pa množica indeksov stolpcev matri
 	\label{eq:7}
 \end{align}
 
-Vsak par $(i, j) \in E$ predstavlja klado $j$, v kateri je prisotna taksonomska enota $i$. Za vsak tak par poiščemo vrednost $P(i, j)$, ki ustreza indeksu klade $k$, v kateri je vsebovana klada $j$ (\ref{eq:7}), pri čemer tudi klada $k$ vsebuje taksonomsko enoto $i$. V kolikor taka klada ne obstaja, to pomeni, da ima klada $j$ svoj koren pozicioniran najbolj blizu korena celotnega končnega drevesa izmed vseh klad s prisotno taksonomsko enoto $i$. 
+Vsak par $(i, j) \in E$ predstavlja klad $j$, v katerem je prisotna taksonomska enota $i$. Za vsak tak par poiščemo vrednost $P(i, j)$, ki ustreza indeksu klada $k$, v katerem je vsebovan klad $j$ (\ref{eq:7}), pri čemer tudi klad $k$ vsebuje taksonomsko enoto $i$. V kolikor tak klad ne obstaja, to pomeni, da ima klad $j$ svoj koren pozicioniran najbolj blizu korena celotnega končnega drevesa izmed vseh kladov s prisotno taksonomsko enoto $i$. 
 
-Ko imamo poračunane vse vrednosti $P(i, j)$, lahko za vsak $j \in I_j$ poiščemo vrednost $P(j)$(\ref{eq:8}). Ta predstavlja najvišji indeks klade, v kateri je klada $j$ vsebovana. Ker so klade sortirane padajoče glede na njihove desetiške vrednosti, najvišji indeks pravzaprav pomeni, da iščemo očeta klade $j$, ki je na čim nižjem nivoju v končnem drevesu, tako da je klada $j$ še v celoti vsebovana.
+Ko imamo poračunane vse vrednosti $P(i, j)$, lahko za vsak $j \in I_j$ poiščemo vrednost $P(j)$(\ref{eq:8}). Ta predstavlja najvišji indeks klada, v katerem je klad $j$ vsebovan. Ker so kladi sortirane padajoče glede na njihove desetiške vrednosti, najvišji indeks pravzaprav pomeni, da iščemo očeta klada $j$, ki je na čim nižjem nivoju v končnem drevesu, tako da je klad $j$ še v celoti vsebovan.
 	
 \begin{align}
 	P(j) = \max(\left\{P(i, j): (i, j) \in E\right\}) \label{eq:8} \\
@@ -618,9 +618,9 @@ Najboljše najdeno asimetrično srednje drevo je tisto, ki maksimizira dano vsot
 \section{Aproksimacijski algoritmi}
 Ker je problem konstrukcije asimetričnega srednjega drevesa polinomsko prevedljiv na problem največje neodvisne množice~\cite{pw} in zato za več kot dve drevesi sodi v razred NP-težkih problemov, je lahko izvajanje algoritma prepočasno, če imamo v vhodni množici $T$ veliko dreves. Zato si bomo ogledali dva aproksimacijska algoritma, ki imata polinomsko časovno zahtevnost.
 
-Prvi, $\frac{2}{k}$-aproksimacijski algoritem, je enostaven. Za vsak par dreves $T_i, T_j \in T$ izračunamo asimetrično srednje drevo $\tau_{ij}$ in izberemo tistega, ki maksimizira vrednostno funkcijo $value(T, \tau_{ij})$. Ker je tako asimetrično srednje drevo sestavljeno iz dveh dreves, posledično lahko vsebuje le klade, ki so prisotne v teh dveh drevesih.
+Prvi, $\frac{2}{k}$-aproksimacijski algoritem, je enostaven. Za vsak par dreves $T_i, T_j \in T$ izračunamo asimetrično srednje drevo $\tau_{ij}$ in izberemo tistega, ki maksimizira vrednostno funkcijo $value(T, \tau_{ij})$. Ker je tako asimetrično srednje drevo sestavljeno iz dveh dreves, posledično lahko vsebuje le klade, ki so prisotni v teh dveh drevesih.
 
-V kolikor imajo drevesa vhodne množice $T$ veliko skupnih klad, je primernejši drugi algoritem. Naj bo $V^* \subseteq V$ podmnožica vozlišč grafa nekompatibilnosti $I(V, E)$, in sicer tistih, ki so skupna vsem drevesom. Takih vozlišč v naslednjem koraku ne potrebujemo, saj niso povezana z nobenim drugim vozliščem. Nato izračunamo največje ujemanje (angl. maximum matching) v grafu $I(V - V^*, E)$, s čimer pridobimo množico robov $E_{M} \subseteq E$, ki nimajo skupnih vozlišč~\cite{mgt}. Vozlišča $V_{M}$, ki so krajišča robov iz množice $E_{M}$, odstranimo iz množice $V$ in ostanejo nam le neujemajoča vozlišča $V_{N} = V - V_{M}$. Primer iskanja množice $V_N$ je prikazan na sliki \ref{img-maxmatch}. Iz binarnih nizov, pripadajočih vozliščem množice $V_{N}$, rekonstruiramo asimetrično srednje drevo po običanjem postopku. Tako drevo, za razliko od drevesa izračunanega s pomočjo prvega aproksimacijskega algoritma, lahko vsebuje klade iz večih dreves vhodne množice hkrati~\cite{pw}. 
+V kolikor imajo drevesa vhodne množice $T$ veliko skupnih kladov, je primernejši drugi algoritem. Naj bo $V^* \subseteq V$ podmnožica vozlišč grafa nekompatibilnosti $I(V, E)$, in sicer tistih, ki so skupna vsem drevesom. Takih vozlišč v naslednjem koraku ne potrebujemo, saj niso povezana z nobenim drugim vozliščem. Nato izračunamo največje ujemanje (angl. maximum matching) v grafu $I(V - V^*, E)$, s čimer pridobimo množico robov $E_{M} \subseteq E$, ki nimajo skupnih vozlišč~\cite{mgt}. Vozlišča $V_{M}$, ki so krajišča robov iz množice $E_{M}$, odstranimo iz množice $V$ in ostanejo nam le neujemajoča vozlišča $V_{N} = V - V_{M}$. Primer iskanja množice $V_N$ je prikazan na sliki \ref{img-maxmatch}. Iz binarnih nizov, pripadajočih vozliščem množice $V_{N}$, rekonstruiramo asimetrično srednje drevo po običanjem postopku. Tako drevo, za razliko od drevesa izračunanega s pomočjo prvega aproksimacijskega algoritma, lahko vsebuje klade iz večih dreves vhodne množice hkrati~\cite{pw}. 
 
 \begin{figure}
 	\begin{center}
@@ -742,7 +742,7 @@ Razrešenost drevesa (\ref{eq:res}) je definirana kot število povezav, ki nasto
 	RF(T_1, T_2) = \left|C(T_1) - C(T_2)\right| + \left|C(T_2) - C(T_1)\right|  \label{eq:rf}
 \end{align}
 
-Robinson-Fouldsova (RF) metrika je najbolj razširjena metrika za primerjanje filogenetskih dreves. Šteje število klad (\ref{eq:rf}), ki si jih drevesi ne delita~\cite{rf}. Za izračun vrednosti RF smo uporabili funkcijo {\it symmetric\_difference()} iz paketa DendroPy\footnote{\url{https://pythonhosted.org/DendroPy/}}, saj v paketu Biopython RF metrika še ni implementirana. Vrednost RF smo izračunali za vsak par konsenznega in vhodnega drevesa, ter za vsako konsenzno drevo vrednosti RF sešteli.
+Robinson-Fouldsova (RF) metrika je najbolj razširjena metrika za primerjanje filogenetskih dreves. Šteje število kladov (\ref{eq:rf}), ki si jih drevesi ne delita~\cite{rf}. Za izračun vrednosti RF smo uporabili funkcijo {\it symmetric\_difference()} iz paketa DendroPy\footnote{\url{https://pythonhosted.org/DendroPy/}}, saj v paketu Biopython RF metrika še ni implementirana. Vrednost RF smo izračunali za vsak par konsenznega in vhodnega drevesa, ter za vsako konsenzno drevo vrednosti RF sešteli.
 
 \section{Vhodna množica 1}
 \begin{figure}[h!]
@@ -781,7 +781,7 @@ Tabela \ref{table-eval-1} prikazuje razrešenost in RF vrednosti asimetričnega 
 	\label{img-eval-result}
 \end{figure}
 
-Rezultat je pričakovan, saj je večina klad prisotna v več kot polovici vhodnih dreves, preostale pa so povečini medsebojno kompatibilne, kar je za večinsko in adamovo drevo ugodno. Najbolj podobno asimetrično srednje drevo je MM-AMT, vendar je njegova razrešenost med najslabšimi. Drevo Bi-AMT ne podaja informacije o skupnem predniku taksonomskih enot $H$ in $I$, zaradi česar je bolj podobno drugemu in tretjemu vhodnemu drevesu kot drevo AMT, posledično pa je njegova razrešenost zaradi tega slabša. 
+Rezultat je pričakovan, saj je večina kladov prisotnih v več kot polovici vhodnih dreves, preostali pa so povečini medsebojno kompatibilni, kar je za večinsko in adamovo drevo ugodno. Najbolj podobno asimetrično srednje drevo je MM-AMT, vendar je njegova razrešenost med najslabšimi. Drevo Bi-AMT ne podaja informacije o skupnem predniku taksonomskih enot $H$ in $I$, zaradi česar je bolj podobno drugemu in tretjemu vhodnemu drevesu kot drevo AMT, posledično pa je njegova razrešenost zaradi tega slabša. 
 
 \section{Vhodna množica 2}
 \begin{figure}[h!]
@@ -823,7 +823,7 @@ najmanj podobno vhodnim drevesom.
 	\label{img-eval-result-2}
 \end{figure}
 
-Ker večina klad ni prisotna v več kot polovici vhodnih dreves, večinoma pa so medsebojno kompatibilne, je rezultat pričakovan. Slaba razrešenost drevesa MM-AMT je najverjetneje posledica majhnega števila skupnih klad in majhnega števila vhodnih dreves.   
+Ker večina kladov ni prisotih v več kot polovici vhodnih dreves, večinoma pa so medsebojno kompatibilni, je rezultat pričakovan. Slaba razrešenost drevesa MM-AMT je najverjetneje posledica majhnega števila skupnih kladov in majhnega števila vhodnih dreves.   
 
 \section{Vhodna množica 3}
 \begin{figure}[h!]
@@ -834,7 +834,7 @@ Ker večina klad ni prisotna v več kot polovici vhodnih dreves, večinoma pa so
 	\label{img-eval-input-3}
 \end{figure}
 
-Zadnja, tretja vhodna množica dreves iz slike \ref{table-eval-3}, je sestavljena tako, da je število skupnih klad majhno, posamezne klade ne nastopajo v več kot polovici vhodnih dreves in so večinoma medsebojno nekompatibilne. Rezultate dobljenih konseznih dreves na sliki \ref{img-eval-input-3} prikazuje tabela \ref{img-eval-result-3}.
+Zadnja, tretja vhodna množica dreves iz slike \ref{table-eval-3}, je sestavljena tako, da je število skupnih kladov majhno, posamezni kladi ne nastopajo v več kot polovici vhodnih dreves in so večinoma medsebojno nekompatibilni. Rezultate dobljenih konseznih dreves na sliki \ref{img-eval-input-3} prikazuje tabela \ref{img-eval-result-3}.
 
 \begin{table}[h!]
 	\begin{center}
@@ -856,7 +856,7 @@ Zadnja, tretja vhodna množica dreves iz slike \ref{table-eval-3}, je sestavljen
 
 Opazimo, da sta polno razrešeni le asimetrično srednje drevo in aproksimirano drevo Bi-AMT. Vsa ostala drevesa vsebujejo vsaj eno nerazrešeno vozlišče. Drevo MM-AMT je v tem primeru enako striktnemu konsenznemu drevesu, tako po topologiji kot glede na razrešenost in RF metriko. Preostala drevesa so glede na RF metriko sicer enakovredna, vendar ker drevesi večinskega in adamovega konsenza nista polno razrešeni, lahko za najboljši drevesi razglasimo asimetrično srednje drevo in Bi-AMT drevo, ki sicer nimata popolnoma enakih topologij.
 
-Slaba razrešenost drevesa MM-AMT je ponovno posledica majhnega števila skupnih klad in v takem primeru je aproksimacija Bi-AMT boljša. Ker posamezne klade ne nastopajo v več kot polovici vhodnih dreves, metodama striktnega in adamovega konsenza ni uspelo popolnoma razrešiti vseh vozlišč vhodnih dreves, saj so klade s premalo pojavitvami kaznovane. Asimetrično srednje drevo za razliko take klade vključi, če to doprinese k informiranosti drevesa.
+Slaba razrešenost drevesa MM-AMT je ponovno posledica majhnega števila skupnih kladov in v takem primeru je aproksimacija Bi-AMT boljša. Ker posamezni kladi ne nastopajo v več kot polovici vhodnih dreves, metodama striktnega in adamovega konsenza ni uspelo popolnoma razrešiti vseh vozlišč vhodnih dreves, saj so kladi s premalo pojavitvami kaznovani. Asimetrično srednje drevo za razliko take klade vključi, če to doprinese k informiranosti drevesa.
 
 \begin{figure}
 	\begin{center}
