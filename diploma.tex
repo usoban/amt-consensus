@@ -715,7 +715,7 @@ Rezultat je programa iz figure \ref{amt-example} je prikazan na sliki \ref{img-e
 
 \chapter{Eksperimentalna primerjava}
 
-Vse tri implementirane metode računanja asimetričnega srednjega drevesa želimo primerjati med sabo in glede na metode striktnega, večinskega in adamovega konsenza. Za ta namen smo pripravili nekaj vhodnih množic in jih preizkusili glede na razrešenost končnega drevesa ter glede na Robinson-Fouldsovo metriko. 
+Vse tri implementirane metode računanja asimetričnega srednjega drevesa želimo primerjati med sabo in glede na metode striktnega, večinskega in adamovega konsenza. Za ta namen smo pripravili nekaj vhodnih množic in jih preizkusili glede na razrešenost končnega drevesa ter glede na Robinson-Fouldsovo metriko. Poleg lastnosti izhodnih dreves nas je zanimal tudi čas izvajanja vseh treh implementiranih metod, s čimer smo ocenili velikost vhodne množice in število taksonomskih enot v drevesih, za katere zaradi predolgega časa izvajanja ni več smiselno uporabiti  natančne metode. 
 
 \section{Razrešenost drevesa in Robinson-Fouldsova metrika}
 Razrešenost drevesa (\ref{eq:res}) je definirana kot število povezav, ki nastopajo v drevesu. Ker imajo vsa drevesa enako število listov, se je drevo z največjim številom povezav največkrat razvejalo. Najbolj razrešeno drevo je binarno drevo (takrat rečemo, da je {\it polno razrešeno}). To ponuja največ informacije o evolucijski zgodovini, saj za vsak par taksonomskih enot vemo, iz katerega skupnega prednika sta se enoti razvili. Zaželjeno je torej, da je število povezav v drevesu čim večje.
@@ -758,7 +758,7 @@ Tabela (\ref{table-eval-1}) prikazuje razrešenost in RF vrednosti asimetričneg
 
 \begin{figure}[h!]
 	\begin{center}
-		\includegraphics[scale=0.65, clip=true, trim=1.5cm 1.5cm 1cm 0.8cm]{gfx/eval_gfx.pdf}
+		\includegraphics[scale=0.55, clip=true, trim=1.5cm 1.5cm 1cm 0.8cm]{gfx/eval_gfx.pdf}
 	\end{center}
 	\caption{Konsenzna drevesa, zgrajena iz množice dreves na sliki (\ref{img-eval-input}). Oznaka Bi-AMT označuje približek asimetričnega srednjega drevesa zgrajenega iz dveh vhodnih dreves, MM-AMT pa aproksimirano drevo zgrajeno s pomočjo največjega ujemanja.}
 	\label{img-eval-result}
@@ -769,7 +769,7 @@ Rezultat je pričakovan, saj je večina klad prisotna v več kot polovici vhodni
 \section{Vhodna množica 2}
 \begin{figure}[h!]
 	\begin{center}
-		\includegraphics[scale=0.55, clip=true, trim=1cm 2cm 1cm 0]{gfx/eval_input_2.pdf}
+		\includegraphics[scale=0.50, clip=true, trim=1cm 2cm 1cm 0]{gfx/eval_input_2.pdf}
 	\end{center}
 	\caption{Druga vhodna množica dreves.}
 	\label{img-eval-input-2}
@@ -795,17 +795,18 @@ Rezultat je pričakovan, saj je večina klad prisotna v več kot polovici vhodni
 
 
 
-Rezultati konsenznih dreves iz slike (\ref{img-eval-result-2}) glede na vhodna drevesa iz slike (\ref{img-eval-input-2}) so prikazani v tabeli (\ref{table-eval-2}). Ponovno so asimetrično srednje drevo ter drevesi večinskega in adamovega konsenza polno razrešena. Če ta drevesa medsebojno primerjamo še po podobnosti vhodnim drevesom, se je najbolje odrezalo asimetrično srednje drevo. Čeprav sta striktno konsenzno drevo in drevo MM-AMT enako slabo razrešeni, je drevo MM-AMT bolj podobno vhodnim drevesom. Drevo Bi-AMT je sicer dobro razrešeno, vendar najmanj podobno vhodnim drevesom. 
+Rezultati konsenznih dreves iz slike (\ref{img-eval-result-2}) glede na vhodna drevesa iz slike (\ref{img-eval-input-2}) so prikazani v tabeli (\ref{table-eval-2}). Ponovno so asimetrično srednje drevo ter drevesi večinskega in adamovega konsenza polno razrešena. Če ta drevesa medsebojno primerjamo še po podobnosti vhodnim drevesom, se je najbolje odrezalo asimetrično srednje drevo. Čeprav sta striktno konsenzno drevo in drevo MM-AMT enako slabo razrešeni, je drevo MM-AMT bolj podobno vhodnim drevesom. Drevo Bi-AMT je sicer dobro razrešeno, vendar 
+najmanj podobno vhodnim drevesom. 
 
-Ker večina klad ni prisotna v več kot polovici vhodnih dreves, večinoma pa so medsebojno kompatibilne, je rezultat pričakovan. Slaba razrešenost drevesa MM-AMT je najverjetneje posledica majhnega števila skupnih klad in majhnega števila vhodnih dreves.   
-
-\begin{figure}
+\begin{figure}[h!]
 	\begin{center}
-		\includegraphics[scale=0.6, clip=true, trim=1.5cm 1.5cm 1cm 0.8cm]{gfx/eval_gfx_2.pdf}
+		\includegraphics[scale=0.65, clip=true, trim=1.5cm 1.5cm 1cm 0.8cm]{gfx/eval_gfx_2.pdf}
 	\end{center}
-	\caption{Konsenzna drevesa, zgrajena iz množice dreves na sliki (\ref{img-eval-input-2}). Oznaka Bi-AMT označuje približek asimetričnega srednjega drevesa zgrajenega iz dveh vhodnih dreves, MM-AMT pa aproksimirano drevo zgrajeno s pomočjo največjega ujemanja.}
+	\caption{Konsenzna drevesa, zgrajena iz množice dreves na sliki (\ref{img-eval-input-2}).}
 	\label{img-eval-result-2}
 \end{figure}
+
+Ker večina klad ni prisotna v več kot polovici vhodnih dreves, večinoma pa so medsebojno kompatibilne, je rezultat pričakovan. Slaba razrešenost drevesa MM-AMT je najverjetneje posledica majhnega števila skupnih klad in majhnega števila vhodnih dreves.   
 
 \section{Vhodna množica 3}
 \begin{figure}[h!]
@@ -840,8 +841,6 @@ Opazimo, da sta polno razrešeni le asimetrično srednje drevo in aproksimirano 
 
 Slaba razrešenost drevesa MM-AMT je ponovno posledica majhnega števila skupnih klad in v takem primeru je aproksimacija Bi-AMT boljša. Ker posamezne klade ne nastopajo v več kot polovici vhodnih dreves, metodama striktnega in adamovega konsenza ni uspelo popolnoma razrešiti vseh vozlišč vhodnih dreves, saj so klade s premalo pojavitvami kaznovane. Asimetrično srednje drevo za razliko take klade vključi, če to doprinese k informiranosti drevesa.
 
-Razlika med asimetričnim srednjim drevesom in aproksimiranim drevesom Bi-AMT ni tako očitna, ker je vhodna množica majhna. Drevo Bi-AMT je namreč zgrajeno le iz dveh vhodnih dreves in v kolikor bi vhodno množico povečali, bi postale razlike bolj očitne, saj bi bilo asimetrično srednje drevo za razliko od približka sposobno vključiti informacije iz večih dreves hkrati.
-
 \begin{figure}
 	\begin{center}
 		\includegraphics[scale=0.6, clip=true, trim=1.5cm 1.5cm 1cm 0.8cm]{gfx/eval_gfx_3.pdf}
@@ -849,6 +848,38 @@ Razlika med asimetričnim srednjim drevesom in aproksimiranim drevesom Bi-AMT ni
 	\caption{Konsenzna drevesa, zgrajena iz množice dreves na sliki (\ref{img-eval-input-3}).}
 	\label{img-eval-result-3}
 \end{figure}
+
+Razlika med asimetričnim srednjim drevesom in aproksimiranim drevesom Bi-AMT ni tako očitna, ker je vhodna množica majhna. Drevo Bi-AMT je namreč zgrajeno le iz dveh vhodnih dreves in v kolikor bi vhodno množico povečali, bi postale razlike bolj očitne, saj bi bilo asimetrično srednje drevo za razliko od približka sposobno vključiti informacije iz večih dreves hkrati.
+
+\section{Primerjava izvajalnih časov}
+Zaradi eksponentne časovne kompleksnosti metode asimetričnega srednjega drevesa nas zanima, kako velika drevesa lahko v doglednem času še izračunamo. Merjenje izvajalnega časa smo opravili na dvojedrnem procesorju i5-3200M, pri čemer smo izrabili le eno jedro, ki teče na frekvenci 1.7 GHz.
+
+Hitrost računanja je odvisna od dveh parametrov, in sicer števila dreves v vhodni množici in števila taksonomskih enot, ki so v drevesih zastopane.
+
+\begin{table}[h!]
+	\begin{center}
+	{\footnotesize
+	\begin{tabular}{ l| l | l | l | l }
+	Št. dreves       & Št. taksonomskih enot & AMT [$s$] & Bi-AMT [$s$] & MM-AMT [$s$] \\ \hline
+	5                & 5                     & $0.017$   & $0.058$      & $0.020$      \\ \hline
+	5                & 10                    & $0.119$   & $0.339$      & $0.146$      \\ \hline
+	5                & 20                    & $1.252$   & $1.641$      & $0.904$      \\ \hline
+	5                & 22                    & $6.321$   & $2.121$      & $1.255$      \\ \hline
+	5                & 25                    & $26.448$  & $2.789$      & $1.085$      \\ \hline
+	5                & 28                    & $163.676$ & $3.753$      & $1.509$      \\ \hline
+	5                & 31                    & $527.254$ & $4.712$      & $1.760$      \\ \hline
+	20               & 5                     & $0.043$   & $1.091$      & $0.045$      \\ \hline
+	20               & 9                     & $2.340$   & $4.912$      & $0.740$      \\ \hline
+	20               & 11                    & $18.915$  & $8.190$      & $3.334$      \\ \hline
+	20               & 14                    & $421.215$ & $14.066$     & $7.456$      \\ \hline
+	20               & 15                    & $3654.519$ & $17.084$    & $9.444$      \\ \hline
+	\end{tabular}
+	\caption{Časi izvajanja metode asimetričnega srednjega drevesa in obeh aproksimacijskih metod za različne velikosti vhodne množice in različnih števil taksonomskih enot.}
+	}
+	\label{table-timing-1}
+	\end{center}		
+\end{table}
+
 
 \chapter{Zaključek}
 Najpomembnejši rezultat dela je zagotovo prva znana implementacija konsenzne metode asimetričnega srednjega drevesa v programski paket Biopython. Čeprav je računska kompleksnost metode v splošnem eksponentna, kar je nezaželjeno, na probleme z izvajalnim časom nismo naleteli. V kolikor ta predstavlja oviro, ima uporabnik možnost izbire ene izmed aproksimacijskih metod. Pravilna izbira aproksimacijske metode je, kot smo pokazali tudi eksperimentalno, odvisna predvsem od lastnosti dreves v vhodni množici. 
