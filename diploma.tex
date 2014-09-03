@@ -779,10 +779,11 @@ aproksimacijo največje neodvisne množice, a se s tem nismo mogli zadovoljiti, 
 vhodna drevesa preveč nenatančna, da bi dobili uporaben rezultat. Na srečo je problem največje neodvisne množice polinomsko
 prevedljiv na problem največje klike v komplementarnem grafu, katero networkx zna poiskati. Kljub temu se je iskanje vseh največjih
 klik komplementarnega grafa izkazalo za dokaj počasno. Ob opazovanju, da naš algoritem izrablja le eno procesorsko jedro, smo
-se odločili, da lahko iskanje največje klike opravimo s pomočjo zunanjega programa Parallel Maximum Clique (PMC)~\cite{pmc}, v 
-kolikor zaznamo prisotnost programa na uporabnikovem sistemu. Čeprav smo s tem vnesli dodatno odvisnost od zunanje programske opreme, 
-lahko odločitev utemeljimo s precej večjo hitrostjo implementacije PMC v primerjavi z lastno implementacijo v programskem jeziku 
-Python. V kolikor program ni najden, se iskanje največjih klik kljub temu opravi z uporabo paketa networkx.
+se odločili, da lahko iskanje največje klike opravimo na vseh razpoložljivih procesorjih s pomočjo zunanjega programa Parallel 
+Maximum Clique (PMC)~\cite{pmc}, v kolikor zaznamo prisotnost programa na uporabnikovem sistemu. Čeprav smo s tem vnesli dodatno
+odvisnost od zunanje programske opreme, lahko odločitev utemeljimo s precej večjo hitrostjo implementacije PMC v primerjavi z 
+lastno implementacijo v programskem jeziku Python. V kolikor program ni najden, se iskanje največjih klik kljub temu opravi 
+z uporabo paketa networkx.
 
 Pri uporabi druge aproksimacijske metode za izračun asimetričnega srednjega drevesa ne računamo največje neodvisne množice, 
 temveč največje ujemanje grafa. Paket networkx za reševanje problema vsebuje funkcijo {\it max\_weight\_matching()}, pri čemer
@@ -821,7 +822,7 @@ Slika \ref{code-amt-func} prikazje glavo implementirane funkcije, ki se nahaja v
 	\end{center}    
 \end{table}
 
-\section{Primer uporabe}
+\section{Enostaven primer uporabe}
 Primer uporabe programske kode je najbolj enostavno prikazati na primeru. Recimo, da imamo pripravljeno datoteko (\ref{trees-input}) z imenom $primer\_a.tre$, ki vsebuje pet dreves v formatu Newick. Iz teh dreves želimo izračunati asimetrično srednje drevo in ga izrisati.
 
 \begin{figure}[h!]
@@ -863,8 +864,78 @@ Rezultat je programa iz figure \ref{amt-example} je prikazan na sliki \ref{img-e
 	\begin{center}
 		\includegraphics[scale=0.65, clip=true, trim=1cm 0 1cm 1cm]{gfx/ex_b.pdf}
 	\end{center}
-	\caption{Rezultat programa iz figure \ref{amt-example}.}
+	\caption{Rezultat programa iz slike \ref{amt-example}.}
 	\label{img-example-output}
+\end{figure}
+
+\section{Primer uporabe z grajenjem dreves iz sekvenc DNA}
+V prejšnjem primeru uporabe smo filogenetska drevesa prebrali iz vnaprej pripravljene
+datoteke. Običajno temu ni tako in je drevesa pred uporabo konsenzne
+metode potrebno najprej izračunati. Primer programske kode, s katero v paketu
+Biopython izračunamo filogenetska drevesa s pomočjo metod UPGMA, metode združevanja 
+sosedov in metode največje varčnosti, iz njih pa tri konsenzna drevesa, 
+prikazuje slika \ref{phylo-trees-example}.
+
+Najprej v šesti vrstici s pomočjo modula {\it Bio.AlignIO} iz vhodne datoteke uvozimo
+vnaprej poravnane sekvence DNA, ki pripadajo taksonomskim enotam. Nato v deseti vrstici
+kreiramo objekt tipa {\it DistanceCalculator}, ki služi za izračun distančne matrike. Tega
+potrebujemo v naslednjih dveh vrsticah, kjer kreiramo konstruktor dreves tipa 
+{\it DistanceTreeConstructor} za metodo UPGMA in metodo združevanja najbližjih sosedov.
+Metoda največje varčnosti za razliko od distančnih metod potrebuje objekt tipa
+{\it ParsimonyScorer}, ki ga kreiramo v petnajsti vrstici, in preiskovalnik prostora 
+dreves tipa {\it NNITreeSearcher}, ki ga kreiramo vrstico nižje. Oba objekta podamo
+konstruktorju metode največje varčnosti v sedemnajsti vrstici.
+
+Sedaj imamo pripravljeno vse, da lahko v vrsticah 20-24 s pomočjo prej ustvarjenih 
+konstruktorjev dreves iz vhodnih sekvenc DNA zgradimo tri filogenetska drevesa. 
+Nato v vrsticah 27-29 iz zgrajenih dreves izračunamo še konsenzna drevesa s 
+pomočjo metod asimetričnega srednjega drevesa, večinskega konsenza in adamovega konsenza.
+Tako kot v prvem primeru za konec izračunana konsenzna drevesa še narišemo, kar naredimo
+s pomočjo paketa {\it matplotlib.pyplot}.
+
+
+\begin{figure}
+\begin{python}
+from Bio import AlignIO
+from Bio import Phylo
+from Bio.Phylo.Consensus import *
+from Bio.Phylo.TreeConstruction import *
+from matplotlib import pyplot
+
+input_file = '../biopython/Tests/TreeConstruction/msa.phy'
+alignments = AlignIO.read(open(input_file), 'phylip')
+# Objekti za izracun distancne matrike,
+# UPGMA in NeighborJoining konstruktor
+calculator = DistanceCalculator('identity')
+nj_constr = DistanceTreeConstructor(calculator, 'nj')
+upgma_const = DistanceTreeConstructor(calculator, 'upgma')
+# Objekti za izracun najbolj varcnega drevesa
+scorer = ParsimonyScorer()
+searcher = NNITreeSearcher(scorer)
+pars_constr = ParsimonyTreeConstructor(searcher)
+# Izracunamo filogenetska drevesa
+trees = [
+    nj_constr.build_tree(alignments),
+    upgma_const.build_tree(alignments),
+    pars_constr.build_tree(alignments)
+]
+# Izracunamo konsenzna filogenetska drevesa
+amt = amt_consensus(trees, method='no_approx')
+majority = majority_consensus(trees)
+adam = adam_consensus(trees)
+for i, t in enumerate([amt, majority, adam]):
+    f = pyplot.figure(i)
+    f.clf()
+    Phylo.draw(t)
+    pyplot.show()
+\end{python}
+\caption{
+Primer programske kode za konstrukcijo konsenznih filogenetskih dreves v
+programskem paketu Biopython. Konsenzna drevesa izračunamo iz treh 
+filogenetskih dreves, ki jih izračunamo s pomočjo metod UPGMA, združevanja
+najbližjih sosedov in metode največje varčnosti iz vhodnih sekvenc DNA. 
+}
+\label{phylo-trees-example}
 \end{figure}
 
 \chapter{Eksperimentalna primerjava}
@@ -872,7 +943,7 @@ Rezultat je programa iz figure \ref{amt-example} je prikazan na sliki \ref{img-e
 Vse tri implementirane metode računanja asimetričnega srednjega drevesa želimo primerjati med sabo in glede na metode striktnega, večinskega in adamovega konsenza. Za ta namen smo pripravili nekaj vhodnih množic in jih preizkusili glede na razrešenost končnega drevesa ter glede na Robinson-Fouldsovo metriko. Programska koda s katero smo pridobili rezultate se nahaja v dodatku \ref{app-code-metrics}. Poleg lastnosti izhodnih dreves nas je zanimal tudi čas izvajanja vseh treh implementiranih metod, s čimer smo ocenili velikost vhodne množice in število taksonomskih enot v drevesih, za katere zaradi predolgega časa izvajanja ni več smiselno uporabiti  natančne metode. Koda za merjenje časa se nahaja v dodatku \ref{app-code-time}.
 
 \section{Razrešenost drevesa in Robinson-Fouldsova metrika}
-Razrešenost drevesa (\ref{eq:res}) je definirana kot število povezav, ki nastopajo v drevesu. Ker imajo vsa drevesa enako število listov, se je drevo z največjim številom povezav največkrat razvejalo. Najbolj razrešeno drevo je binarno drevo (takrat rečemo, da je {\it polno razrešeno}). To ponuja največ informacije o evolucijski zgodovini, saj za vsak par taksonomskih enot vemo, iz katerega skupnega prednika sta se enoti razvili. Zaželjeno je torej, da je število povezav v drevesu čim večje.
+Razrešenost drevesa (\ref{eq:res}) je definirana kot število povezav, ki nastopajo v drevesu. Ker imajo vsa drevesa enako število listov, se je drevo z največjim številom povezav največkrat razvejalo. Najbolj razrešeno drevo je binarno drevo (takrat rečemo, da je {\it polno razrešeno}). To ponuja največ informacij o evolucijski zgodovini, saj za vsak par taksonomskih enot vemo, iz katerega skupnega prednika sta se enoti razvili. Zaželjeno je torej, da je število povezav v drevesu čim večje.
 
 \begin{align}
 	Res(T) = \left|E(T)\right| \label{eq:res} ~~~~~~~~~~~~~~~~~~~~~ \\
@@ -1108,13 +1179,25 @@ drevesih zastopane.
 	\end{center}		
 \end{table}
 
+\begin{figure}[h!]
+	\begin{center}
+		\includegraphics[scale=0.64, clip=true, trim=0 0 0 0]{gfx/time_10_taxa.pdf}
+	\end{center}
+	\caption{
+		Izvajalni časi vseh treh metod za drevesa z 10 taksonomskimi enotami
+	 	za vse tri implementirane metode izračuna asimetričnega srednjega drevesa.
+	 	{\it AMT (PMC)} označuje izvajalni čas natančne metode, ki za iskanje
+	 	maksimalne neodvisne množice uporablja zunanji program PMC. 
+	 }
+	\label{img-eval-timing-10taxa}
+\end{figure}
 
 \chapter{Zaključek}
 Najpomembnejši rezultat dela je zagotovo prva znana implementacija konsenzne metode asimetričnega srednjega drevesa v programski paket Biopython. Čeprav je računska kompleksnost metode v splošnem eksponentna, kar je nezaželjeno, na probleme z izvajalnim časom nismo naleteli. V kolikor ta predstavlja oviro, ima uporabnik možnost izbire ene izmed aproksimacijskih metod. Pravilna izbira aproksimacijske metode je, kot smo pokazali tudi eksperimentalno, odvisna predvsem od lastnosti dreves v vhodni množici. 
 
 Kot smo pokazali na treh vhodnih množicah, asimetrično srednje drevo ni nujno tisto, ki drevesa vhodne množice povzema najbolje. Prav tako kot z izbiro aproksimacijske metode tudi tukaj velja, da je izbira konsenzne metode odvisna predvsem od predhodnega poznavanja lastnosti dreves vhodne množice. V kolikor ta vsebujejo veliko število nekompatibilnih parov poddreves, potem je izbira metode asimetričnega srednjega drevesa smotrna, v nasprotnem primeru pa lahko že večinsko ali adamovo konsenzno drevo da primerljive, če ne celo boljše rezultate.
 
-Kar se tiče razrešenosti dreves, je v naših testnih primerih asimetrično srednje drevo vedno bilo polno razrešeno in tako ponujalo največ informacije o evolucijski zgodovini, s čimer je prekašalo vse ostale metode. Tega sicer ne moremo trditi za obe aproksimacijski metodi. Metoda z izračunom največjega ujemanja je po razrešenosti v nekaterih primerih bila primerljiva zgolj s striktnim konsenznim drevesom, metoda z izračunom drevesa iz dveh vhodnih dreves pa je ob dobri razrešenosti običajno proizvedla drevo, ki se slabše ujema z vhodnimi drevesi.
+Kar se tiče razrešenosti dreves, je v naših testnih primerih asimetrično srednje drevo vedno bilo polno razrešeno in tako ponujalo največ informacij o evolucijski zgodovini, s čimer je prekašalo vse ostale metode. Tega sicer ne moremo trditi za obe aproksimacijski metodi. Metoda z izračunom največjega ujemanja je po razrešenosti v nekaterih primerih bila primerljiva zgolj s striktnim konsenznim drevesom, metoda z izračunom drevesa iz dveh vhodnih dreves pa je ob dobri razrešenosti običajno proizvedla drevo, ki se slabše ujema z vhodnimi drevesi.
 
 Možnosti za izboljšave vidimo predvsem pri aproksimacijskih algoritmih. Nad drevesi, izračunanimi s pomočjo prvega aproksimacijskega algoritma, bi npr. lahko ponovno izračunali konsenzna drevesa in izbrali najboljšega. Prav tako so potrebne dodatne študije, s katerimi bi identificirali lastnosti dreves vhodne množice, za da metoda asimetričnega srednjega drevesa boljše rezultate.
 
