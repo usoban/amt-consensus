@@ -833,16 +833,18 @@ množica grafa (angl., maximum independent set - MIS) je tista neodvisna množic
 $V_{MIS} \subseteq V$, ki vsebuje največ vozlišč. Potrebno je povdariti, da za 
 nek graf $I(V, E)$ lahko obstaja več različnih $V_{MIS}$. Ker vozlišča $V_{MIS}$ 
 predstavljajo binarne nize oz. klade končnega drevesa, to pomeni, da za en graf 
-$I(V, E)$ lahko obstaja več asimetričnih srednjih dreves.
+$I(V, E)$ lahko obstaja več asimetričnih srednjih dreves. Primeri
+vseh največjih neodvisnih množic za graf nekompatibilnosti iz 
+slike~\ref{img-incompat-graph-example} so narisani na 
+sliki~\ref{img-mis-examples}.
 
 \begin{figure}
 	\begin{center}
-		\includegraphics[scale=0.46]{gfx/incompat_graphs_pair.png}
+		\includegraphics[scale=0.43]{gfx/incompat_graph_all.png}
 	\end{center}
 	\caption{
-		Dve različni največji neodvisni množici za graf nekompatibilnosti iz 
-		slike~\ref{img-incompat-graph-example}. Na danem grafu sicer obstajajo 
-		štiri največje neodvisne množice. {\bf TODO: zakaj ne pokažeš vse štiri?}
+		Vse štiri različne največje neodvisne množice za graf nekompatibilnosti 
+		iz slike~\ref{img-incompat-graph-example}.
 	}
 	\label{img-mis-examples}
 \end{figure}
@@ -918,6 +920,19 @@ na čim nižjem nivoju v končnem drevesu, tako da je klad $j$ še v celoti vseb
 	P(i, j) = P(j)   ~~~~~~~~~~~~  \forall (i, j) \in E \label{eq:9}
 \end{align}
 
+\begin{figure}[h!]
+	\begin{center}
+		\includegraphics[scale=0.67, clip=true, trim=0 3cm 3cm 3cm]{gfx/tree_reconstruct_1.pdf}
+	\end{center}
+	\caption{
+		Na levi strani je prikazan graf, ki je rekonstruiran iz vrednosti 
+		$P[j]$ iz slike \ref{img-reconstruct-m}. Da iz grafa pridobimo 
+		končno drevo, prikazano na desni strani, za označevanje listov 
+		uporabimo matriko $M'$ iz slike \ref{img-reconstruct-m}.
+	}
+	\label{img-reconstruct-1}
+\end{figure}
+
 V kolikor velja enačba \ref{eq:9}, potem za matriko $M'$ obstaja filogenetsko 
 drevo~\cite{gd}. V tem primeru se lahko lotimo njegove konstrukcije. Najprej 
 ustvarimo graf, v katerega kot vozlišča dodamo koren bodočega drevesa $r$ in za 
@@ -937,19 +952,6 @@ vrstice $i$. To storimo za vse vrstice, s čimer označimo vse liste. Kot prikaz
 primer dokončanega drevesa na desni strani slike \ref{img-reconstruct-1}, za konec 
 notranjim vozliščem in povezavam odstranimo oznake. S tem smo prišli do končnega 
 filogenetskega drevesa, ki ga označimo s $\tau$.  
-
-\begin{figure}
-	\begin{center}
-		\includegraphics[scale=0.74, clip=true, trim=0 3cm 3cm 3cm]{gfx/tree_reconstruct_1.pdf}
-	\end{center}
-	\caption{
-		Na levi strani je prikazan graf, ki je rekonstruiran iz vrednosti 
-		$P[j]$ iz slike \ref{img-reconstruct-m}. Da iz grafa pridobimo 
-		končno drevo, prikazano na desni strani, za označevanje listov 
-		uporabimo matriko $M'$ iz slike \ref{img-reconstruct-m}.
-	}
-	\label{img-reconstruct-1}
-\end{figure}
 
 \section{Vrednost asimetričnega srednjega drevesa}
 Omenili smo že, da za en graf nekompatibilnosti lahko obstaja več največjih 
@@ -1018,7 +1020,7 @@ množice hkrati~\cite{pw}.
 \section{Biopython}
 Biopython~\cite{biopython} je odprtokodni paket modulov, napisan v programskem 
 jeziku Python, ki ponuja mnoge funkcionalnosti s področja bioinformatike. 
-Olajša nam delo s formati datotek, kot so BLAST, ClustralW, FASTA ter GenBank
+Olajša nam delo s formati datotek, kot so BLAST, ClustalW, FASTA ter GenBank
 in ponuja enostaven dostop do spletnih storitev, npr. NCBI. 
 Poleg funkcionalnosti, implementiranih v programskem jeziku Python ponuja
 tudi enostaven dostop do zunanjih programov. Nekateri glavni moduli paketa 
@@ -1164,9 +1166,9 @@ sprejema dva parametra:
 \item {\bf method} je tipa {\it niz}, s katerim izbiramo metodo izračuna. Veljavne so tri vrednosti:
 
 \begin{itemize}
-    \item {\bf no\_approx} izračun točnega drevesa.
+    \item {\bf no\_approx} izračun točnega drevesa,
 
-    \item {\bf bi\_approx} izračun največ treh dreves.
+    \item {\bf bi\_approx} izračun s kombiniranjem največ dveh dreves,
 
     \item {\bf maxmatch\_approx} izračun drevesa s pomočjo največjega ujemanja.
 \end{itemize}
@@ -1289,7 +1291,7 @@ from Bio.Phylo.Consensus import *
 from Bio.Phylo.TreeConstruction import *
 from matplotlib import pyplot
 
-input_file = '../biopython/Tests/TreeConstruction/msa.phy'
+input_file = './biopython/Tests/TreeConstruction/msa.phy'
 alignments = AlignIO.read(open(input_file), 'phylip')
 # Objekti za izracun distancne matrike,
 # UPGMA in NeighborJoining konstruktor
@@ -1542,8 +1544,6 @@ enot prisotnih v tekoči vodi, morski vodi ali tleh. Drevesa so bila zgrajena s
 pomočjo programa MrBayes z uporabo GTR evolucijskega modela. Poravnane sekvence, 
 ki so bile vhod v metodo bayesove inference, so bile dolge 1651 baznih parov~\cite{taxa150}.
 
-{\bf TODO: dodaj čas izvajanja tega primera.}
-
 \begin{table}[h!]
 	\begin{center}
 	{\footnotesize
@@ -1562,6 +1562,7 @@ ki so bile vhod v metodo bayesove inference, so bile dolge 1651 baznih parov~\ci
 	RF($T_9$)    & 250  & 243    & 196     & 147         & 232         & 231       \\ \hline
 	RF($T_{10}$) & 260  & 233    & 212     & 147         & 232         & 213       \\ \hline
 	RF (vsota)   & 2546 & 2389   & 2068    & 1470        & 2358        & 2242      \\ \hline
+	Čas [s]      & 164  & 293    & 11.5    & 0.3         & 3.5         & 15        \\ \hline 
 	\end{tabular}
 	\label{table-eval-alge}
 	\caption{
@@ -1581,6 +1582,10 @@ večinsko). V tem smislu je metoda striktnega konsenza najbolj konzervativna,
 metoda asimetričnega srednjega drevesa pa najbolj drzna in s tem podaja največ informacij 
 o evolucijskih dogodkih. 
 
+Časovno se je najbolje odrezala metoda striktnega konsenza, sledi pa ji metoda večinskega
+konsenza. Aproksimacijska metoda MM-AMT je bila hitrejša od Adamsovega konsenza,
+najpočasnejša pa je bila metoda Bi-AMT.
+
 \section{Primerjava izvajalnih časov}
 Zaradi eksponentne časovne kompleksnosti metode asimetričnega srednjega drevesa nas 
 zanima, kako velika drevesa in vhodne množice lahko še obdelamo v doglednem času.
@@ -1594,10 +1599,10 @@ metode s takimi drevesi nimajo večjih težav. Spodnji del slike prikazuje graf 
 drevesa s 50 taksonomskimi enotami. Opazimo, da natančna metoda s pomočjo programa
 PMC brez težav opravi z manjšimi vhodnimi množicami dreves,
 nato pa prične čas naraščati precej hitreje. Čas, potreben za izvedbo aproksimacijskih 
-metod Bi-AMT in MM-AMT tudi z večanjem števila vhodnih dreves pri večjem številu 
+metod tudi z večanjem števila vhodnih dreves pri večjem številu 
 taksonomskih enot narašča polinomsko. Metoda Bi-AMT je kljub hitrejšemu naraščanju
 izvajalnega časa za manjše število taksonomskih enot pri večjem številu taksonomskih 
-enot hitrejša od aproksimacijske metode MM-AMT. 
+enot hitrejša od metode MM-AMT. 
 
 \clearpage
 \begin{figure}[h!]
@@ -1620,10 +1625,10 @@ enot hitrejša od aproksimacijske metode MM-AMT.
 	\label{img-eval-timing-taxons}
 \end{figure}
 
-{\bf TODO: Grafi so zelo fajn. Bi bilo pa vseeno dobro izpisati tudi
-tabelo. Predvsem, da se vidi čase izvajanja (AMT, modra linija), ki zdaj
-niti ne morejo biti prikazani, ne da bi zaradi tega stisnili ostale tri
-grafe preveč skupaj.}
+%{\bf TODO: Grafi so zelo fajn. Bi bilo pa vseeno dobro izpisati tudi
+%tabelo. Predvsem, da se vidi čase izvajanja (AMT, modra linija), ki zdaj
+%niti ne morejo biti prikazani, ne da bi zaradi tega stisnili ostale tri
+%grafe preveč skupaj.}
 
 Slika~\ref{img-eval-timing-taxons} prikazuje grafa časov izvajanja glede na število 
 taksonomskih enot pri fiksnem številu dreves. Zgornji graf  prikazuje izvajalne čase
@@ -1982,7 +1987,292 @@ for n in N_TAXONS:
 
 \chapter{Programska koda metode {\it Bio.Phylo.Consensus.amt\_consensus}\label{appendix-code-amt_consensus}}
 
-{\bf TODO: dodaj glavni del (metodo amt\_consensus)}
+\begin{python}
+def amt_consensus(trees, method='no_approx'):
+  """Search Asymmetric Median Tree from multiple trees
+
+  :Parameters:
+  trees: list
+      list of trees to produce consensus tree
+
+  @type trees: list of Bio.Phylo.BaseTree.Tree
+  @returns: Bio.Phylo.BaseTree.Tree
+  """
+  import multiprocessing
+  import re
+  from distutils.spawn import find_executable
+  from itertools import combinations
+  from scipy import io
+  from scipy import sparse
+  from subprocess import Popen, PIPE
+
+  species = trees[0].get_terminals()
+  species_names = [s.name for s in species]
+  n_species = len(species)
+  n_trees = len(trees)
+  cpus = multiprocessing.cpu_count()
+
+  def _tree_encoding(tree):
+    clades = [
+      bs for _, bs 
+      in _tree_to_bitstrs(tree, species_names).items() 
+      if bs.count('1') != n_species
+    ]
+    leaves = [
+      _clade_to_bitstr(cld, species_names) for cld 
+      in tree.find_clades(terminal=True)
+    ]
+    return list(set(clades + leaves))
+
+  tree_encodings = [_tree_encoding(t) for t in trees]
+  profile_bitstrings = set(reduce(
+    lambda enc1, enc2: enc1 + enc2, tree_encodings
+  ))
+  bitstring_weights = {
+    bs: len([
+      i for i, t 
+      in enumerate(tree_encodings) if bs in t
+    ]) for bs in profile_bitstrings
+  }
+  common_bitstrings = set(
+    bs for bs, w in bitstring_weights.items() 
+    if w == n_trees
+  )
+
+  def _amt_val(tree_encoding):
+    tree_enc_set = set(tree_encoding)
+    if len(common_bitstrings - tree_enc_set) != 0 or len(tree_enc_set - profile_bitstrings) != 0:
+      res = -float('Inf')
+    else:
+      res = sum([
+        bitstring_weights[w] 
+        for w in tree_enc_set - common_bitstrings
+      ])
+
+    return res
+
+  def _incompat_graph_nx(trees):
+    all_bs = reduce(lambda x, y: x+y, trees, [])
+    unique_bitstrings = list(set(all_bs))
+    incompatible_pairs = [
+      (bs1, bs2) for bs1 in unique_bitstrings 
+      for bs2 in unique_bitstrings 
+      if not bs1.iscompatible(bs2)
+    ]
+    incomp_graph = nx.Graph()
+    incomp_graph.add_nodes_from(unique_bitstrings)
+    incomp_graph.add_edges_from(incompatible_pairs)
+
+    return incomp_graph, unique_bitstrings
+
+  def _max_indep_set(incomp_graph, unique_bitstrings):
+    def _pmc(pmc_exec_path):
+      comp_bitstrings = [
+        bs for bs in unique_bitstrings 
+        if bs not in common_bitstrings
+      ]
+      comp_graph = nx.complement(incomp_graph)
+      comp_graph.remove_nodes_from(common_bitstrings)
+      mtx = nx.to_numpy_matrix(comp_graph, nodelist=comp_bitstrings)
+      mtx = sparse.coo_matrix(np.tril(mtx))
+      io.mmwrite('/tmp/igc', mtx, field='integer')
+
+      process = Popen([pmc_exec_path, '-f', '/tmp/igc.mtx', '-a', '0', '-t', str(cpus), '-r', '0'], stdout=PIPE)
+      (output, err) = process.communicate()
+      exit_code = process.wait()
+
+      if exit_code != 0:
+        raise Exception('PMC aborted... %s' % err)
+      else:
+       pmc_regex = re.compile('Maximum clique:\s([\d\s]*)')
+       match = re.search(pmc_regex, output)
+        if match is None:
+          raise Exception('Couldnt find PMC output. [%s]' % output)
+        elif len(match.groups()) > 2:
+          pmc_out = match.group(2).split(' ')
+        else:
+          pmc_out = match.group(1).split(' ')
+        mis_vertices = [
+          comp_bitstrings[int(v)-1] for v in pmc_out 
+          if v != '\n'
+        ] + list(common_bitstrings)
+        max_val = _amt_val(mis_vertices)
+      return mis_vertices, max_val
+
+    def _netx():
+      current_max_size = 0
+      comp_graph = nx.complement(incomp_graph)
+      comp_graph.remove_nodes_from(common_bitstrings)
+      maxes = []
+      for clq in nx.find_cliques(comp_graph):
+        if len(clq) > current_max_size:
+          maxes = [clq]
+          current_max_size = len(clq)
+        elif len(clq) == current_max_size:
+          maxes.append(clq)
+      current_max = None
+      current_best_val = -float('inf')
+      for clq in maxes:
+        mis = clq + list(common_bitstrings)
+        val = _amt_val(mis)
+        if val > current_best_val:
+          current_best_val = val
+          current_max = mis
+      return current_max, current_best_val
+
+    pmc_exec = find_executable('pmc')
+    if pmc_exec is not None:
+      return _pmc(pmc_exec)
+    else:
+      return _netx()
+
+  def _reconstruct(bitstrings):
+    m = np.transpose(
+      np.array([
+        bs.to_numpy() for bs 
+        in sorted(bitstrings, 
+          reverse=True, 
+          key=lambda bs: int(bs)
+        )
+      ])
+    )
+    ones = np.transpose(np.nonzero(m))
+    row_indices = np.unique(ones[:, 0])
+    col_indices = np.unique(ones[:, 1])
+    cols_by_rows_index = {
+      ridx: ones[ones[:, 0] == ridx][:, 1] 
+      for ridx in row_indices
+    }
+    column_values = {cidx: [] for cidx in col_indices}
+
+    for cell in ones:
+      cols = cols_by_rows_index[cell[0]]
+      valid_cols = cols[cols < cell[1]]
+      max_k = np.max(valid_cols) if valid_cols.size != 0 else None
+      column_values[cell[1]].append(max_k)
+
+    for k in column_values.keys():
+      if len(set(column_values[k])) == 1:
+        column_values[k] = column_values[k][0]
+      else:
+        raise Exception('Column %d not unique, tree does not exist for given encoding.' % k)
+
+    nodes = {
+      eid: BaseTree.Clade(name=eid) 
+      for eid in column_values.keys() + ['root']
+    }
+    top_level_edges = [
+      eid for eid in column_values.keys() 
+      if column_values[eid] is None
+    ]
+    other_edges = [
+      eid for eid in column_values.keys() 
+      if column_values[eid] is not None
+    ]
+    # connect top level edges to root
+    for eid in top_level_edges:
+      nodes['root'].clades.append(nodes[eid])
+    # connect other nodes between each other
+    for eid in other_edges:
+      nodes[column_values[eid]].clades.append(nodes[eid])
+    # label terminals (tree leaves)
+    max_cols_by_rows = {
+      ridx: np.max(cols_by_rows_index[ridx]) 
+      for ridx in cols_by_rows_index.keys()
+    }
+    for row_id in max_cols_by_rows:
+      term = nodes[max_cols_by_rows[row_id]]
+      term.name = species_names[row_id]
+
+    # purge node names if they do not contain string or they contain 'root' string
+    for nk in nodes.keys():
+      if type(nodes[nk].name) != str or nodes[nk].name == 'root':
+        nodes[nk].name = ''
+
+    return BaseTree.Tree(root=nodes['root'])
+
+  def _amt_approx_bi(trees):
+    """
+    Computes AMT from input trees using approximation 
+    method 1 (computing AMTs from two trees at a time).
+    @type trees:  list of list of _BitString
+    @return: Bio.Phylo.BaseTree.Tree
+    """
+    best_amt = None
+    best_amt_val = -float('inf')
+    for comb in combinations(range(0, len(trees)), 2):
+      incomp_graph, ubs = _incompat_graph_nx([
+        trees[comb[0]], trees[comb[1]]
+      ])
+      incomp_graph.remove_nodes_from(common_bitstrings)
+      verts = incomp_graph.nodes()
+      top, bottom = nx.bipartite.sets(incomp_graph)
+      if len(top) == 0:
+        mvc = bottom
+      elif len(bottom) == 0:
+        mvc = top
+      else:
+        mates = nx.max_weight_matching(incomp_graph, maxcardinality=True)
+        matched = mates.keys()
+        top_unmatched = [
+          v for v in top 
+          if v not in matched
+        ]
+        cwo = [
+          adj for adj in incomp_graph[v] 
+          if adj in bottom 
+          for v in top_unmatched
+        ]
+        cwo += top_unmatched
+        mvc = set(
+          [v for v in top if v not in cwo] 
+          + list(set(bottom) & set(cwo))
+        )
+      mis = [v for v in verts if v not in mvc]
+      bitstrings = list(common_bitstrings) + mis
+      val = _amt_val(bitstrings)
+      if val > best_amt_val:
+        best_amt = bitstrings
+        best_amt_val = val
+
+    return _reconstruct(best_amt)
+
+  def _amt_approx_mm(trees):
+    """
+    Computes AMT from input trees using approximation 
+    method 2 (maximum matching)
+    @type trees: list of list of _BitString
+    @return Bio.Phylo.BaseTree.Tree
+    """
+    incomp_graph, unique_bitstrings = _incompat_graph_nx(trees)
+    vertices = incomp_graph.nodes()
+    incomp_graph.remove_nodes_from(common_bitstrings)
+    matching = nx.max_weight_matching(incomp_graph, maxcardinality=True)
+    for match in matching.keys():
+      vertices.remove(match)
+    return _reconstruct(vertices)
+
+  def _amt_noapprox(trees):
+    """
+    Computes AMT from input trees.
+    @type trees: list of list of _BitString
+    @return Bio.Phylo.BaseTree.Tree
+    """
+    incomp_graph, unique_bitstrings = _incompat_graph_nx(trees)
+    mis, mis_val = _max_indep_set(incomp_graph, unique_bitstrings)
+    return _reconstruct(mis)
+
+  if method == 'no_approx':
+    amt = _amt_noapprox(tree_encodings)
+  elif method == 'bi_approx':
+    amt = _amt_approx_bi(tree_encodings)
+  elif method == 'maxmatch_approx':
+    amt = _amt_approx_mm(tree_encodings)
+  else:
+    raise Exception('Invalid method name. Given: %s; available: no_approx, bi_approx, maxmatch_approx' % method)
+
+  return amt
+\end{python}
 
 \end{document}
 
