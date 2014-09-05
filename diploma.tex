@@ -422,7 +422,7 @@ A proper abstract should contain around 100 words which makes this one way too s
 O evolucijskih razmerjih med živimi ogranizmi se je prvi spraševal Charles Darwin,
 ko je narisal znamenito "drevo življenja", prikazano na sliki \ref{img-darwin-tree}.
 Vendar je Darwin lahko organizme razvrščal le glede na njihove morfološke lastnosti.
-Nato je prišlo do odkritja DNA in izuma računalnika in porodila se je ideja o računski
+Nato je prišlo do odkritja DNA in izuma računalnika ter porodila se je ideja o računski
 filogenetiki, eni izmed prvih področij bioinformatike, katere cilj je, predvsem iz 
 sekvenc DNA in RNA, odkriti evolucijska razmerja med različnimi taksonomskimi enotami.
 Mnoge računske filogenetske metode so bile razvite že v prejšnjem stoletju, vendar so
@@ -432,9 +432,9 @@ različnih filogenetskih dreves, mnogokrat želimo rezultate kombinirati v eno d
 tako pridobiti eno teorijo o evolucijski zgodovini taksonomskih enot. 
 
 Sem na pomoč priskočijo konsenzne metode, ki na podlagi različnih  kriterijev dele 
-vhodnih dreves v končnem sestavljenem drevesu kombinirajo, ohranijo, ali zavržejo, 
-s ciljem sestaviti drevo, katero kar se da dobro povzema informacije o evolucijski 
-zgodovini, ki jih nosijo vhodna drevesa. Tekom konstrukcije konsenznega drevesa lahko 
+vhodnih dreves v končnem sestavljenem drevesu kombinirajo, ohranijo ali zavržejo, 
+in sicer s ciljem sestaviti drevo, ki kar se da dobro povzema informacije o evolucijski 
+zgodovini, ki jih nosijo vhodna drevesa. Med konstrukcijo konsenznega drevesa lahko 
 metoda izračuna več različnih dreves, izbrano pa je tisto, ki uživa največjo podporo 
 vhodnih dreves.
 
@@ -450,13 +450,13 @@ asimetričnega srednjega drevesa.
 		\includegraphics[scale=0.45]{gfx/darwin_tree.jpg}
 	\end{center}
 	\caption{
-		"Drevo življenja", prva skica evolucijske zgodovine, narisana s strani 
-		Charlesa Darwina leta 1837~\cite{cd}.
+		"Drevo življenja", prva skica evolucijske zgodovine, narisal jo je 
+		Charles Darwin leta 1837~\cite{cd}.
 	}
 	\label{img-darwin-tree}
 \end{figure}
 
-Spoznali teoretično ozadje konstrukcije asimetričnega srednjega drevesa, nato pa bo 
+Spoznali bomo teoretično ozadje konstrukcije asimetričnega srednjega drevesa, nato pa bo 
 sledila predstavitev programskega paketa Biopython, v katerega smo
 vključili implementacijo asimetričnega srednjega drevesa, in ostalih orodij, ki smo
 jih pri tem uporabili. Uspešnost implementirane metode bomo eksperimentalno ocenili
@@ -464,7 +464,7 @@ na treh vhodnih množicah, ki izražajo različne lastnosti, in na eni realni vh
 množici. Rezultate bomo primerjali s tremi popularnimi konsenznimi metodami glede
 na razrešenost končnega drevesa in glede na Robinson-Fouldsovo metriko. 
 Za  konec bomo preverili, za kakšno število dreves v vhodni množici je uporaba
-implementirane metode še dovolj hitra in predlagali možne izboljšave.
+implementirane metode še dovolj hitra, in predlagali možne izboljšave.
 
 
 \chapter{Filogenetske in konsenzne metode}
@@ -476,8 +476,8 @@ kakšno vlogo pri tem igrajo konsenzne metode.
 
 \section{Filogenetske računske metode}
 
-Filogenetske računske metode lahko razdelimo na dve večji skupini, distančne in
-statistične metode. Vse kot vhod prejmejo DNA ali RNA sekvence taksonomskih enot, 
+Filogenetske računske metode lahko razdelimo na dve večji skupini in sicer distančne in
+statistične metode. Vse kot vhod prejmejo DNA- ali RNA-sekvence taksonomskih enot, 
 katerih evolucijsko zgodovino želimo rekonstruirati, kot izhod pa vrnejo eno ali
 več filogenetskih dreves, ki imajo konice (liste) označene z imeni taksonomskih enot.
 Nekatere metode so zmožne oceniti tudi dolžino vej drevesa, pri čemer dolžina veje
@@ -1591,20 +1591,18 @@ zanima, kako velika drevesa in vhodne množice lahko še obdelamo v doglednem č
 Merjenje časa izvajanja smo opravili za natančno metodo, obe aproksimacijski metodi
 in tudi natančno metodo z nameščenim programom PMC.   
 
-
 Zgornji graf na sliki~\ref{img-eval-timing-trees} prikazuje čase izvajanja za
-drevesa, ki imajo deset taksonomskih enot. Opazimo, da se čas izvajanja z 
-večanjem števila vhodnih dreves najhitreje povečuje za aproksimacijsko metodo 
-Bi-AMT, medtem ko je natančna metoda primerljiva z aproksimacijsko metodo MM-AMT.
-Najhitrejše izvajanje smo dosegli z natančno metodo skupaj z uporabo programa
-PMC. Spodnji del grafa, ki je prikazuje izvajalni čas za drevesa z 20 taksonomskimi
-enotami, kaže nekoliko drugačno stanje. Izvajalni čas natančne metode pričakovano
-prične naraščati eksponentno glede na število vhodnih dreves in takoj preseže vse
-ostale. Med preostalimi metodami se razmerja niso spremenila, še vedno je najhitrejša
-natančna metoda z uporabo zunanjega programa PMC.
+drevesa, ki imajo dvajset taksonomskih enot. Opazimo, da se čas izvajanja z 
+večanjem števila vhodnih dreves za natančno metodo AMT povečuje zelo hitro. Preostale
+metode s takimi drevesi nimajo večjih težav. Spodnji del slike prikazuje graf za
+drevesa s 50 taksonomskimi enotami. Opazimo, da natančna metoda s pomočjo programa
+PMC brez težav opravi z manjšimi vhodnimi množicami dreves,
+nato pa prične čas naraščati precej hitreje. Čas, potreben za izvedbo aproksimacijskih 
+metod Bi-AMT in MM-AMT tudi z večanjem števila vhodnih dreves pri večjem številu 
+taksonomskih enot narašča polinomsko. Metoda Bi-AMT je kljub hitrejšemu naraščanju
+izvajalnega časa za manjše število taksonomskih enot pri večjem številu taksonomskih 
+enot hitrejša od aproksimacijske metode MM-AMT. 
 
-Izračun natančnega asimetričnega srednjega drevesa je brez zunanjega programa PMC 
-mogoč le za majhno število taksonomskih enot.  
 \clearpage
 \begin{figure}[h!]
 	\begin{center}
