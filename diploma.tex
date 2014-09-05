@@ -1609,7 +1609,7 @@ enot hitrejša od aproksimacijske metode MM-AMT.
 		\fbox{\includegraphics[scale=0.53, clip=true, trim=0 0 0 0.5cm]{gfx/times_10_20.pdf}}
 	\end{center}
 	\caption{
-		Izvajalni časi vseh treh metod za drevesa z 10 in 20 taksonomskimi enotami
+		Izvajalni časi vseh treh metod za drevesa z 20 in 50 taksonomskimi enotami
 	 	za vse tri implementirane metode izračuna asimetričnega srednjega drevesa. 
 	}
 	\label{img-eval-timing-trees}
@@ -1628,9 +1628,32 @@ Slika~\ref{img-eval-timing-taxons} prikazuje grafa časov izvajanja glede na št
 taksonomskih enot pri fiksnem številu dreves. Zgornji graf  prikazuje izvajalne čase
 za deset vhodnih dreves, drugi pa za dvajset. Pri obeh so razmerja enaka. Potreben čas
 za izvedbo natančne metode skokovito poraste, medtem ko čas izvajanja preostalih 
-narašča precej počasneje. Še vedno je najhitrejši izračun točnega asimetričnega
-srednjega drevesa s pomočjo programa PMC.   
+metod narašča precej počasneje. Najhitrejši je izračun točnega asimetričnega srednjega 
+drevesa s pomočjo programa PMC.
 
+Iz zgornjih grafov je razvidno, da na čas izvajanja bistveno bolj kot število taksonomskih
+enot vpliva število vhodnih dreves. Vendar ni tako enostavno. Zaradi naključnega generiranja 
+dreves vhodne množice težko trdimo, kakšne so bile njihove lastnosti.  Število 
+taksonomskih enot v drevesu je neposredno povezano z globino drevesa. V kolikor
+je taksonomskih enot več, potem je število možnih poddreves večje. Z večjim številom
+možnih poddreves se poveča tudi število potencialnih vozlišč v grafu nekompatibilnosti.
+Slednje je sicer odvisno tako od števila dreves v vhodni množici kot njihovih lastnosti.
+Drevesa lahko vsebujejo veliko število taksonomskih enot, a so si medsebojno precej
+podobna, pri čemer bo graf nekompatibilnosti majhen, četudi je število vhodnih dreves 
+zelo veliko, in posledično bo čas izvajanja krajši. Na drugi strani število taksonomskih 
+enot ne rabi biti zelo veliko, da naletimo na težave s časom izvajanja, če so drevesa 
+medsebojno zelo različna.
+
+Zaključimo torej lahko, da je izračun asimetričnega srednjega drevesa s pomočjo natančne
+metode za večje vhodne množice smotrn le z uporabo
+zunanjega programa PMC. Tudi tu sicer naletimo na težave, vendar precej pozneje. Primer 
+puščavskih zelenih alg, ki vsebuje 150 taksonomskih enot in deset dreves, smo naprimer 
+uspeli izračunati v dvajsetih minutah, medtem ko so naključno generirani primeri 
+pokazali, da v splošnem čas, potreben za izračun, lahko skokovito naraste. Ocenimo
+lahko, da je uporaba natančne metode izračuna trenutno smotrna za srednje velike 
+vhodne podatke s 150 taksonomskimi enotami in do 50 drevesi, dejanske številke pa so odvisne od
+lastnosti vhodnih dreves. V primeru težav lahko posežemo po aproksimacijskih metodah, 
+kjer na težave s časom izvajanja nebi smeli naleteti.
 
 \chapter{Zaključek}
 Najpomembnejši rezultat dela je zagotovo prva znana implementacija konsenzne metode
@@ -1638,7 +1661,7 @@ asimetričnega srednjega drevesa v programski paket Biopython. Čeprav je račun
 kompleksnost metode v splošnem eksponentna, kar je nezaželjeno, in se problemi z
 izvajalnim časom za natančno metodo pojavijo hitro, ima uporabnik možnost namestitve 
 zunanjega programa PMC, ki močno pospeši izvajanje. Kljub temu je za velike vhodne 
-množice dreves ($n > 100$) izračun lahko dolgotrajen, čeprav to ne velja v splošnem,
+množice dreves izračun lahko dolgotrajen, čeprav to ne velja v splošnem,
 saj lastnosti vhodnih dreves (število kompatibilnih poddreves) igrajo velik faktor pri
 iskanju največje neodvisne množice, ki je računsko najintenzivnejši del. V kolikor 
 uporabnik naleti na težave s časom izvajanja, ima na voljo izbrati eno izmed 
@@ -1667,9 +1690,14 @@ ki se slabše ujema z vhodnimi drevesi.
 
 Možnosti za izboljšave vidimo predvsem pri aproksimacijskih algoritmih. Nad drevesi,
 izračunanimi s pomočjo prvega aproksimacijskega algoritma, bi npr. lahko ponovno 
-izračunali konsenzna drevesa in izbrali najboljšega. Prav tako so potrebne dodatne 
-študije, s katerimi bi identificirali lastnosti dreves vhodne množice, za katere da 
-metoda asimetričnega srednjega drevesa boljše rezultate.
+izračunali konsenzna drevesa in izbrali najboljšega. Poleg tega bi lahko
+izračun asimetričnega srednjega drevesa za vsak par vhodnih dreves opravili paralelno. 
+
+Eksponentni čas za konstrukcijo asimetričnega srednjega drevesa bi lahko zmanjšali z 
+uporabo katerega izmed aproksimacijskih algoritmov za iskanje največje neodvisne množice.
+Nenazadnje so potrebne dodatne študije, s katerimi bi identificirali lastnosti 
+dreves vhodne množice, za katere da metoda asimetričnega srednjega drevesa boljše 
+rezultate od ostalih konsenznih metod.
 
 \addcontentsline{toc}{chapter}{Literatura}
 \begin{thebibliography}{99}
