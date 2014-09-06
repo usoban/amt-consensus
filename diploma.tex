@@ -47,8 +47,8 @@
 \newcommand{\tsubject}{\ttitle}
 \newcommand{\tsubjectEn}{\ttitleEn}
 \newcommand{\tauthor}{Urban Soban}
-\newcommand{\tkeywords}{konsenz, drevo, filogenetika}
-\newcommand{\tkeywordsEn}{consensus, tree, phylogeny}
+\newcommand{\tkeywords}{konsenz, drevo, filogenetika, asimetrično srednje drevo, Biopython, Robinson-Fouldsova mera}
+\newcommand{\tkeywordsEn}{consensus, tree, phylogeny, asymmetric median tree, Biopython, Robinson–Foulds distance}
 
 
 \usepackage{hyperref}
@@ -380,6 +380,7 @@ Družini.
   {\bf MIS} & maximum independent set & največja neodvisna množica \\
   {\bf UPGMA} & unweighted pair group method with arithmetic mean & neuteženo gručanje s pomočjo aritmetične sredine \\
   {\bf CDAO} & comparative data analysis ontology  & ontologija podatkov za primerjalno analizo \\
+  {\bf RF} & Robinson-Foulds distance & Robinson-Fouldsova metrika\\
 \end{tabular}
 
 
@@ -435,11 +436,11 @@ Na pomoč priskočijo konsenzne metode, ki na podlagi različnih  kriterijev del
 vhodnih dreves v končnem sestavljenem drevesu kombinirajo, ohranijo ali zavržejo,
 in sicer s ciljem sestaviti drevo, ki kar se da dobro povzema informacije o evolucijski 
 zgodovini, ki jih nosijo vhodna drevesa. Med konstrukcijo konsenznega drevesa lahko 
-metoda izračuna več različnih dreves, izbrano pa je tisto z največjo podporo 
+metoda izračuna več različnih dreves. Izbere tisto z največjo podporo 
 vhodnih dreves.
 
 V prvem delu diplomske naloge se bomo na kratko seznanili z najbolj uporabljenimi
-metodami računanja filogenetskih dreves, katerih produkt je nato vhod v algoritem 
+metodami gradnje filogenetskih dreves, katerih produkt je nato vhod v algoritem 
 za izračun konsenza. Nato bomo obravnavali nekatere priljubljene konsenzne metode, 
 kot so striktni konsenz, večinski konsenz in srednji konsenz (konsenz mediane). 
 V drugem delu naloge se bomo osredotočili na novejšo konsenzno metodo, tj. algoritem
@@ -450,26 +451,26 @@ asimetričnega srednjega drevesa.
 		\includegraphics[scale=0.45]{gfx/darwin_tree.jpg}
 	\end{center}
 	\caption{
-		"Drevo življenja", prva skica evolucijske zgodovine, narisal jo je 
+		"Drevo življenja," prva skica evolucijske zgodovine, narisal jo je 
 		Charles Darwin leta 1837~\cite{cd}.
 	}
 	\label{img-darwin-tree}
 \end{figure}
 
-Spoznali bomo teoretično ozadje konstrukcije asimetričnega srednjega drevesa, nato pa bo 
-sledila predstavitev programskega paketa Biopython, v katerega smo
-vključili implementacijo asimetričnega srednjega drevesa, in ostalih orodij, ki smo
+Spoznali bomo teoretično ozadje konstrukcije asimetričnega srednjega drevesa.
+Sledila bo predstavitev programskega paketa Biopython, v katerega smo
+vključili implementacijo asimetričnega srednjega drevesa. Predstavili bomo tudi ostala orodja, ki smo
 jih pri tem uporabili. Uspešnost implementirane metode bomo eksperimentalno ocenili
 na treh vhodnih množicah, ki izražajo različne lastnosti, in na eni realni vhodni 
 množici. Rezultate bomo primerjali s tremi popularnimi konsenznimi metodami glede
 na razrešenost končnega drevesa in glede na Robinson-Fouldsovo metriko. 
 Za  konec bomo preverili, za kakšno število dreves v vhodni množici je uporaba
-implementirane metode še dovolj hitra, in predlagali možne izboljšave.
+implementirane metode še dovolj hitra.
 
 
 \chapter{Filogenetske in konsenzne metode}
 
-V diplomski nalogi se povečamo konsenzni metodi asimetričnega srednjega drevesa. Da bi 
+V diplomski nalogi se posvečamo konsenzni metodi asimetričnega srednjega drevesa. Da bi 
 razumeli, zakaj so konsenzne metode v računski filogenetiki potrebne, bomo v tem 
 razdelku zgolj na kratko predstavili, kako so filogenetska drevesa sploh zgrajena in 
 kakšno vlogo pri tem igrajo konsenzne metode. 
@@ -477,8 +478,8 @@ kakšno vlogo pri tem igrajo konsenzne metode.
 \section{Filogenetske računske metode}
 
 Filogenetske računske metode lahko razdelimo na dve večji skupini in sicer distančne in
-statistične metode. Vse kot vhod prejmejo DNA- ali RNA-sekvence taksonomskih enot, 
-katerih evolucijsko zgodovino želimo rekonstruirati, kot izhod pa vrnejo eno ali
+statistične metode. Vse kot vhod prejmejo sekvence DNA ali RNA taksonomskih enot, 
+katerih evolucijsko zgodovino želimo rekonstruirati. Na izhodu vrnejo eno ali
 več filogenetskih dreves, ki imajo konice (liste) označene z imeni taksonomskih enot.
 Nekatere metode so zmožne oceniti tudi dolžino vej drevesa, pri čemer dolžina veje
 predstavlja čas, ki je bil potreben za divergenco dveh taksonomskih enot iz skupnega
@@ -506,17 +507,17 @@ matrike imamo na voljo več različnih evolucijskih modelov, med njimi:
 		\item Jukes-Cantor (JC69) je najbolj enostaven model, ki predpostavlja, 
 			  da je frekvenca vseh nukleotidov enaka in da so vse možne 
 			  substitucije na enem baznem paru enako verjetne~\cite{jc};
-		\item Kimura (K80) model, ki substitucije baznega para razlikuje glede 
+		\item Model Kimure (K80), ki substitucije baznega para razlikuje glede 
 			  na tip in upošteva, da se lahko določen tip substitucije pojavi 
 			  bolj pogosto~\cite{k80}. Tipe substitucij delimo na tranzicije 
 			  (sprememba purina v purin ali sprememba pirimidina v pirimidin) 
-			  ter transverzije (sprememba purina v pirimidina ali obratno)~\cite{fel};
-		\item General Time Reversible (GTR) je najnaprednejši model, ki 
+			  ter transverzije (sprememba purina v pirimidin ali obratno)~\cite{fel};
+		\item Model General Time Reversible (GTR) je najnaprednejši, ki 
 			  evolucijo modelira kot stohastični proces. Ne predpostavlja 
 			  neodvisnosti vseh lokacij vhodnih sekvenc, temveč šteje frekvence 
 			  pojavitve nukleotidov glede na pozicijo v kodonu. Nato oceni šest
-			  parametrov, s pomočjo katerih zgradi matriko z verjetnostmi 
-			  prehoda enega nukleotida v drugega~\cite{gtr}.
+			  parametrov, s pomočjo katerih zgradi matriko verjetnosti
+			  prehodov med nukleotidi~\cite{gtr}.
 	\end{itemize}
 
 \noindent Na podlagi razdalj, zapisanih v distančni matriki, izbrana metoda v gručo 
@@ -561,8 +562,8 @@ verjetnosti dreves glede na vhodne sekvence.
 
 Ker nobena izmed metod ne zagotavlja pravilno generirane evolucijske zgodovine 
 oz. pravilnosti ne moremo preveriti (razen v primeru laboratorijskih organizmov, 
-kjer je razmerje vnaprej znano)~\cite{phy}, raziskovalci po navadi uporabijo eno 
-izmed metod vzorčenja primerov, npr. metoda izloči enega (angl., jackknife) ali 
+kjer je razmerje vnaprej znano)~\cite{phy}. Zato raziskovalci po navadi uporabijo eno 
+izmed metod vzorčenja primerov, npr., metoda izloči enega (angl., jackknife, leave-one-out) ali 
 metoda razmnoževanja primerov (angl., bootstrap), s katero vzorčijo 
 lokacije vhodnih sekvenc, in za vsak vzorec zgradijo svoje filogenetsko drevo. 
 Vsako drevo, zgrajeno iz vzorca, se primerja s prvotno pridobljenim in izračuna 
@@ -579,12 +580,12 @@ tekmujoče si hipoteze. To lahko dosežemo z uporabo konsenznih metod.
 
 \section{Konsenzne metode}
 Konsenzne metode nad filogenetskimi drevesi so uporabljene po vsakem filogenetskem
-algoritmu, ki kot izhod proizvede več filogenetskih dreves. Načeloma lahko delujejo 
+algoritmu, ki kot izhod proizvede več filogenetskih dreves. Nače\-lo\-ma lahko delujejo 
 nad katero koli množico dreves, v kateri imajo drevesa enake množice oznak listov. 
 V tem se bistveno razlikujejo od metod superdreves, ki so sposobne kombinirati 
 tudi drevesa, katerih množice oznak listov niso enake~\cite{bw}. Poleg metode 
 asimetričnega srednjega drevesa, ki jo obravnavamo v nadaljevanju tega dela, 
-naštejmo nekatere najbolj pogoste konsenzne metode:
+so nekatere najbolj pogoste konsenzne metode:
 
 \begin{itemize}
 	\item Kompatibilno drevo je sestavljeno iz delov vseh vhodnih dreves; ni 
@@ -610,7 +611,7 @@ naštejmo nekatere najbolj pogoste konsenzne metode:
 	      vhodnih drevesih. Vedno obstaja, vendar lahko vsebuje poddrevesa, ki niso 
 	      prisotna v nobenem drevesu vhodne množice~\cite{classification}.
 	      
-	\item Nelson-Pageva konsenza metoda je bila osnovana na ideji, da se eno drevo 
+	\item Nelson-Pageva konsenza metoda je osnovana na ideji, da se eno drevo 
 		  lahko moti, dve drevesi pa ne. Predpostavlja, da so deli dreves, prisotni
 		  v dveh ali več vhodnih drevesih, zelo verjetno resnični. Take dele imenujemo 
 		  replicirane komponente. Nelson-Pagevo drevo je tako drevo, ki vsebuje vse 
@@ -635,7 +636,7 @@ Namen konsenznih metod je torej pridobiti topologijo drevesa, s katero se čim b
 vhodna drevesa, ne pa tudi usklajevanje divergentnih časov taksonomskih enot in njihovih 
 skupnih prednikov.  
 
-\section{Programska oprema za izračun filogenetskih dreves}
+\section[Programska oprema za izračun filogenetskih dreves]{Programska oprema za izračun\\ filogenetskih dreves}
 Vse zgoraj opisane metode so že implementirane v samostojnih programskih paketih. Med najbolj znane sodijo:
 
 \begin{itemize}
@@ -643,14 +644,13 @@ Vse zgoraj opisane metode so že implementirane v samostojnih programskih paketi
 		 pomočjo distančnih metod UPGMA in združevanja sosedov, korekcijo 
 		 razdalj pa lahko opravi s pomočjo evolucijskega modela K80~\cite{clustalw2}. 
 	      Poleg možnosti samostojne namestitve ga lahko uporabljamo tudi 
-	      preko spletnega vmesnika, dostopnega na 
-	      \url{http://www.ebi.ac.uk/Tools/phylogeny/clustalw2_phylogeny/}.
+	      preko spletnega vmesnika~\cite{clustalw2_phylogeny}.
 	\item PHYLIP, paket samostojnih programov, ki ponuja izračun filogenetskih dreves 
 		  s pomočjo distančnih metod, metode največje varčnosti in metode največjega 
 		  verjetja. Poleg tega ponuja programe za vzorčenje primerov in program
 	      za izračun konsenznega drevesa s pomočjo striktnega ter večinskega konsenza. 
 	      Korekcije razdalj je mogoče opraviti z evolucijskimi modeli JC69, K80 in F84~\cite{phylip}.
-	\item MrBayes, ki izračun filogenetskega drevesa opravi s pomočjo bayesove inference. 
+	\item MrBayes, ki izračun filogenetskega drevesa opravi s pomočjo Bayesove inference. 
 		  Za izračun posteriorne verjetnostne porazdelitve uporablja markove verige v 
 		  kombinaciji z Metropolis-Hastingsovim algoritmom za učinkovito preiskovanje 
 	      prostora topologij. Ker na izhodu proizvede mnogo dreves, ponuja tudi 
@@ -665,7 +665,7 @@ Vse zgoraj opisane metode so že implementirane v samostojnih programskih paketi
 	\item HashCS, program za izračun konsenza filogenetskih dreves, ki šteje za 
 		  enega najhitrejših programov te vrste. Implementira lastni algoritem, ki 
 		  teče v polinomskem času. Ker je bil izdelan z namenom hitrejšega povzemanja 
-		  dreves, ki so rezultat enega izmed algoritmov z uporabo bayesove inference, 
+		  dreves, ki so rezultat enega izmed algoritmov z uporabo Bayesove inference, 
 		  predpostavlja, da je število vhodnih dreves mnogo večje kot število 
 		  taksonomskih enot~\cite{hashcs}.
 \end{itemize} 
@@ -679,13 +679,13 @@ dreves~\cite{pw}.
 Metoda kot vhod prejme množico $k$ filogenetskih dreves 
 $T = \left\{ {T_1, T_2, ..., T_k} \right\}$, ki imajo liste označene z $n$ 
 taksonomskimi enotami iz množice $S = \left\{ {s_1, s_2, ..., s_n} \right\}$. 
-Sledijo naslednji koraki algoritma, katerega dele bomo podrobneje obravnavali
- v naslednjih poglavjih:
+Korake algoritma bomo podrobneje obravnavali
+ v naslednjih poglavjih~\cite{pw}:
 \begin{itemize}
 	\item drevesa pretvorimo v primerno reprezentacijo,
 	\item poiščemo nekompatibilne pare poddreves in konstruiramo graf nekompatibilnosti,
 	\item v grafu nekompatibilnosti poiščemo največjo neodvisno množico vozlišč in
-	\item rekonstruiramo drevo iz vozlišč največje neodvisne množice.
+	\item rekonstruiramo drevo iz največje neodvisne množice vozlišč.
 \end{itemize}
 
 \section{Kodiranje dreves}
@@ -710,21 +710,21 @@ primeru ne moremo.
 	\label{eq:1}
 \end{align}
 
-Vsak rob drevesa določa poddrevo, to pa predstavlja skupnega prednika s svojimi 
-potomci. Takemu poddrevesu pravimo tudi klad (taksonomsa skupina, angl., clade). Ne bo nas zanimala 
-celotna struktura poddreves, temveč zgolj njihovi listi. Vsak klad drevesa lahko 
-predstavimo z binarnim nizom, ki ga dobimo z uporabo preslikave \ref{eq:2}, pri 
-čemer je treba poudariti, da je vrstni red posameznih znakov v binarnem nizu 
+\noindent Vsak rob drevesa določa poddrevo, to pa predstavlja skupnega prednika s svojimi 
+potomci. Takemu poddrevesu pravimo tudi klad (taksonomsa skupina, angl., clade). Ne zanima nas
+celotna struktura poddreves, temveč zgolj listi. Vsak klad drevesa lahko 
+predstavimo z binarnim nizom, ki ga dobimo z uporabo preslikave \ref{eq:2}.
+Vrstni red posameznih znakov v binarnem nizu je
 pomemben, saj je na vsak znak vezan pomen; vsako posamezno mesto v nizu pripada 
 enemu izmed listov drevesa, znak na tem mestu pa zgolj indicira prisotnost ali
-neprisotnost lista oz. taksonomske enote v kladu, kodiranem z binarnim nizom.
+odsotnost lista oz. taksonomske enote v kladu, kodiranem z binarnim nizom.
 
 
 \begin{align}
 	c_e = \left\{ c(e, s): s \in S \right\} \label{eq:2}
 \end{align}
 
-Če binarne nize vseh kladov drevesa zberemo v množico (\ref{eq:3}), 
+\noindent Če binarne nize vseh kladov drevesa zberemo v množico (\ref{eq:3}), 
 nam $C(T_i)$ določa kodiranje celotnega drevesa $T_i$. Primer dveh takih množic
 je prikazan na sliki \ref{img-bistring-trees-example}, kjer so binarni nizi 
 prikazani na vejah, ki vodijo do korenov kladov.
@@ -733,10 +733,10 @@ prikazani na vejah, ki vodijo do korenov kladov.
 	C(T_i) = \left\{ c_e : e \in E(T_i) \right\} \label{eq:3}
 \end{align}
 
-Kodiranje zdaj lahko izvedemo nad vsemi drevesi vhodne množice $T$, pri čemer je 
+\noindent Kodiranje zdaj lahko izvedemo nad vsemi drevesi vhodne množice $T$, pri čemer je 
 ponovno treba poudariti, da se pomen posameznih mest v binarnih nizih med 
 različnimi drevesi ne sme spreminjati, saj sicer kladov iz različnih dreves ne 
-bi mogli medsebojno primerjati. 
+moremo medsebojno primerjati. 
 
 \begin{figure}
 	\begin{center}
@@ -758,7 +758,7 @@ binarnem nizu $c_e$.
 	\phi(j) \cap \phi(k) = \emptyset \lor \phi(j) \subseteq \phi(k) \lor \phi(k) \subseteq \phi(j) \label{eq:5}
 \end{align} 
 
-Če za binarna niza $j$ in $k$ iz poljubnih dveh dreves vhodne množice $T$ velja 
+\noindent Če za binarna niza $j$ in $k$ iz poljubnih dveh dreves vhodne množice $T$ velja 
 pogoj~\ref{eq:5}, potem sta binarna niza kompatibilna. Vennov diagram pripadajočih 
 množic $\phi(j)$ in $\phi(k)$ prikazuje slika \ref{img-venn-compatibility}. 
 Če velja $\left|\phi(j)\right| = 1$ ali $\left|\phi(k)\right| = 1$, potem 
@@ -910,7 +910,7 @@ svoj koren pozicioniran najbolj blizu korena celotnega končnega drevesa izmed v
 kladov s prisotno taksonomsko enoto $i$. 
 
 Ko imamo poračunane vse vrednosti $P(i, j)$, lahko za vsak $j \in I_j$ poiščemo
-vrednost $P(j)$(\ref{eq:8}). Ta predstavlja najvišji indeks klada, v katerem je
+vrednost $P(j)$~(\ref{eq:8}). Ta predstavlja najvišji indeks klada, v katerem je
 klad $j$ vsebovan. Ker so kladi sortirane padajoče glede na desetiške
 vrednosti, najvišji indeks pravzaprav pomeni, da iščemo očeta klada $j$, ki je
 na čim nižjem nivoju v končnem drevesu, tako da je klad $j$ še v celoti vsebovan.
@@ -933,7 +933,7 @@ na čim nižjem nivoju v končnem drevesu, tako da je klad $j$ še v celoti vseb
 	\label{img-reconstruct-1}
 \end{figure}
 
-Če velja enačba \ref{eq:9}, potem za matriko $M'$ obstaja filogenetsko 
+\noindent Če velja enačba \ref{eq:9}, potem za matriko $M'$ obstaja filogenetsko 
 drevo~\cite{gd}. V tem primeru se lahko lotimo njegove konstrukcije. Najprej 
 ustvarimo graf, v katerega kot vozlišča dodamo koren bodočega drevesa $r$ in za 
 vsak $j \in I_j$ svoje vozlišče $v_j$. Nato za vsako vozlišče $v_j$, za katerega 
@@ -943,6 +943,10 @@ drevesa s pomočjo povezave $(r, v_j)$, in prav tako označimo z $j$. Primer tak
 grafa, konstruiranega za matriko $M'$ s slike \ref{img-reconstruct-m} je prikazan
 na levi strani slike \ref{img-reconstruct-1}. Tak graf je že drevo, vendar je potrebno 
 razrešiti oznake na povezavah.
+
+% {\bf TODO: Zakaj je tu koren označe z r? Ne bi v\_0 tudi bilo ok. Potem ne
+% bi imel več izjeme, da moraš vozlisca j, za katera je $P(j)==0$,
+% obravnavati posebej? }
 
 Ker vsaka vrstica matrike $M'$ predstavlja eno taksonomsko enoto, lahko oznake povezav
 določimo tako, da pregledujemo matriko po vrsticah. Za vsak $i \in I_i$ najdemo največji 
@@ -972,7 +976,7 @@ asimetričnem srednjem drevesu, vendar niso prisotni v vseh vhodnih drevesih
 	value(T, \tau) = \sum_{c \in C(\tau) - \cap C(T_i)} w(c) \label{eq:11}
 \end{align}
 
-Najboljše najdeno asimetrično srednje drevo je tisto, ki maksimizira dano vsoto 
+\noindent Najboljše najdeno asimetrično srednje drevo je tisto, ki maksimizira dano vsoto 
 uteži~\ref{eq:11}.
 
 \section{Aproksimacijski algoritmi}
@@ -984,7 +988,7 @@ aproksimacijska algoritma, ki imata polinomsko časovno zahtevnost.
 
 Prvi, t.j. $\frac{2}{k}$-aproksimacijski algoritem, je enostaven. Za vsak par dreves 
 $T_i, T_j \in T$ izračunamo asimetrično srednje drevo $\tau_{ij}$ in izberemo 
-tistega, ki maksimizira vrednostno funkcijo $value(T, \tau_{ij})$. Ker je tako 
+tistega, ki maksimizira vrednostno funkcijo $value(T, \tau_{ij})$~(\ref{eq:11}). Ker je tako 
 asimetrično srednje drevo sestavljeno iz dveh dreves, posledično lahko vsebuje 
 le klade, ki so prisotni v teh dveh drevesih.
 
@@ -1036,9 +1040,9 @@ Biopython, ki so relevantni tudi za računanje filogenetskih dreves, so:
 	\item $Bio.Phylo$: razredi in funkcije za izračun filogenetskih dreves.
 \end{itemize} 
 
-Modul $Bio.Phylo$ že omogoča izračun filogenetskih dreves s pomočjo 
+\noindent Modul $Bio.Phylo$ že omogoča izračun filogenetskih dreves s pomočjo 
 metod UPGMA, Neighbor Joining in Maximum Parsimony. Poleg tega ponuja 
-tudi metode ponovnega vzorčenja bootstrap in jackknife.  
+tudi metode vzorčenja razmnoževanje primerov (angl., bootstrap) in izloči enega (angl., jackknife).  
 
 Izračun konsenznih filogenetskih dreves je mogoč s pomočjo podmodula 
 $Bio.Phylo.Consensus$, v katerem so bile najprej implementirane metode 
@@ -1084,8 +1088,8 @@ klik kljub temu opravi z uporabo paketa networkx.
 \subsection{Izračun največjega ujemanja v grafu}
 Pri uporabi druge aproksimacijske metode za izračun asimetričnega 
 srednjega drevesa ne računamo največje neodvisne množice, 
-temveč največje ujemanje grafa. Paket networkx za reševanje 
-problema vsebuje funkcijo {\it max\_weight\_matching()}, pri čemer 
+temveč največje ujemanje grafa. Funkcija {\it max\_weight\_matching()}
+v paketu networkx računa največje ujemanje, pri čemer 
 so vse uteži robov grafa enake 1.
 
 Tako kot natančna metoda, tudi prva aproksimacijska metoda v grafu
@@ -1134,9 +1138,9 @@ mis = [v for v in verts if v not in mvc]
 Za rekonstrukcijo drevesa smo potrebovali orodje, ki je zmožno dela z matrikami. 
 Ker je paket Biopython že odvisen od paketa numpy\footnote{\url{http://www.numpy.org/}},
 je ta bil logična izbira. Med kreiranjem matrike je bilo treba binarne nize 
-pretvoriti v stolpce matrike. Za to potrebo smo razredu \_BitString dodali metodo 
+pretvoriti v stolpce matrike. Zato smo razredu \_BitString dodali metodo 
 $to\_numpy()$, ki niz ničel in enic pretvori v binarni vektor tipa 
-$numpy.ndarray$ z eno dimenzijo. Za potrebe sortiranja smo razredu 
+$numpy.ndarray$ z eno dimenzijo. Za sortiranje smo razredu 
 $\_BitString$ dodali še metodo $\_\_int\_\_()$, ki izračuna desetiško vrednost 
 binarnega niza.
 
@@ -1175,7 +1179,7 @@ sprejema dva parametra:
 \end{itemize}
     
 \section{Enostaven primer uporabe}
-Primer uporabe programske kode je najbolj enostavno prikazati najprej na
+Primer uporabe programske kode najprej prikažemo na
 enostavnejšem primeru. Recimo, da imamo pripravljeno datoteko z imenom 
 {\it primer\_a.tre} in vsebino na sliki \ref{trees-input}. Vsebuje pet dreves
 v formatu Newick, iz katerih želimo izračunati asimetrično srednje drevo
@@ -1223,8 +1227,8 @@ uvozimo funkcijo $amt\_consensus$,  v tretji pa uvozimo paket za risanje $pyplot
 
 V peti vrstici uvozimo filogenetska drevesa iz datoteke $primer\_a.tre$ in jih 
 razčlenimo, s čimer dobimo seznam objektov tipa $Bio.Phylo.BaseTree.Tree$. V 
-šesti vrstici s preprostim klicem funkcije iz obstoječega seznama dreves 
-izračunamo asimetrično srednje drevo. V sedmi vrstici drevo preoblikujemo tako, 
+vrstici 6 s preprostim klicem funkcije iz obstoječega seznama dreves 
+izračunamo asimetrično srednje drevo. V vrstici 7 drevo preoblikujemo tako, 
 da bodo globlja poddrevesa prikazana na vrhu, in v zadnjih dveh vrsticah drevo 
 izrišemo na ekran. 
 
@@ -1241,7 +1245,7 @@ razberemo divergentne čase taksonomskih enot.
 	\label{img-example-output}
 \end{figure}
 
-\section{Primer uporabe z grajenjem dreves iz sekvenc DNA}
+\section[Primer uporabe z grajenjem dreves iz sekvenc DNA]{Primer uporabe z grajenjem dreves iz\\ sekvenc DNA}
 V prejšnjem primeru uporabe smo filogenetska drevesa prebrali iz vnaprej pripravljene
 datoteke. Običajno ni tako in je drevesa pred uporabo konsenzne
 metode treba najprej izračunati. Primer programske kode, s katero v paketu
@@ -1265,19 +1269,21 @@ programski paket PHYLIP.
 }
 \end{figure}
 
-Najprej v šesti vrstici s pomočjo modula {\it Bio.AlignIO} iz vhodne datoteke uvozimo
-vnaprej poravnane sekvence DNA, ki pripadajo taksonomskim enotam. Nato v deseti vrstici
+% TODO: preveri, ce so vse reference na vrstice (tudi drugje) pravilne
+
+Najprej v vrstici 8 s pomočjo modula {\it Bio.AlignIO} iz vhodne datoteke uvozimo
+vnaprej poravnane sekvence DNA, ki pripadajo taksonomskim enotam. Nato v vrstici 11
 kreiramo objekt tipa {\it DistanceCalculator}, ki služi za izračun distančne matrike. Tega
 potrebujemo v naslednjih dveh vrsticah, kjer kreiramo konstruktor dreves tipa 
 {\it DistanceTreeConstructor} za metodo UPGMA in metodo združevanja najbližjih sosedov.
 Metoda največje varčnosti za razliko od distančnih metod potrebuje objekt tipa
-{\it ParsimonyScorer}, ki ga kreiramo v petnajsti vrstici, in preiskovalnik prostora 
+{\it ParsimonyScorer}, ki ga kreiramo v vrstici 15, in preiskovalnik prostora 
 dreves tipa {\it NNITreeSearcher}, ki ga kreiramo vrstico nižje. Oba objekta podamo
-konstruktorju metode največje varčnosti v sedemnajsti vrstici.
+konstruktorju metode največje varčnosti v vrstici 17.
 
-Zdaj imamo pripravljeno vse, da lahko v vrsticah 20-24 s pomočjo prej ustvarjenih 
+Zdaj imamo pripravljeno vse, da lahko v vrsticah 20-22 s pomočjo prej ustvarjenih 
 konstruktorjev dreves iz vhodnih sekvenc DNA zgradimo tri filogenetska drevesa. 
-Nato v vrsticah 27-29 iz zgrajenih dreves izračunamo še konsenzna drevesa s 
+Nato v vrsticah 25-27 iz zgrajenih dreves izračunamo še konsenzna drevesa s 
 pomočjo metod asimetričnega srednjega drevesa, večinskega konsenza in adamovega konsenza.
 Tako kot v prvem primeru uporabe za konec izračunana konsenzna drevesa še izrišemo, 
 kar naredimo s pomočjo paketa {\it pyplot}.
@@ -1339,7 +1345,7 @@ dodatku~\ref{app-code-metrics}. Poleg lastnosti izhodnih dreves nas je zanimal
 tudi čas izvajanja vseh treh implementiranih metod, s čimer smo ocenili velikost 
 vhodne množice in število taksonomskih enot v drevesih, za katere zaradi 
 predolgega časa izvajanja ni več smiselno uporabiti  natančne metode. Tudi koda za 
-merjenje časa je v dodatku \ref{app-code-time}.
+merjenje časa je v dodatku~\ref{app-code-time}.
 
 \section[Robinson-Fouldsova mera razrešenosti drevesa]{Robinson-Fouldsova mera razrešenosti\\ drevesa}
 Razrešenost drevesa (\ref{eq:res}) je definirana kot število povezav, ki 
@@ -1355,7 +1361,7 @@ je število povezav v drevesu čim večje.
 	RF(T_1, T_2) = \left|C(T_1) - C(T_2)\right| + \left|C(T_2) - C(T_1)\right|  \label{eq:rf}
 \end{align}
 
-Robinson-Fouldsova (RF) metrika je najbolj razširjena metrika za primerjanje 
+\noindent Robinson-Fouldsova (RF) metrika je najbolj razširjena metrika za primerjanje 
 filogenetskih dreves. Šteje število kladov (\ref{eq:rf}), ki si jih drevesi 
 ne delita~\cite{rf}. Za izračun vrednosti RF smo uporabili funkcijo 
 {\it symmetric\_difference()} iz paketa 
@@ -1373,7 +1379,9 @@ vrednosti RF.
 	\label{img-eval-input}
 \end{figure}
 
-\begin{table}
+{\bf TODO: drevesa na sliki so označena z "Vhodno drevo 1", v tabelah pa se na njih sklicujes "T1". Poenoti.}
+
+\begin{table}[h!]
 	\begin{center}
 	{\footnotesize
 	\begin{tabular}{ l| l | l | l | l | l }
@@ -1385,13 +1393,13 @@ vrednosti RF.
 	Večinski konsenz & 17          & 2             & 5             & 4             & 11         \\ \hline
 	Adamov konsenz   & 11          & 5             & 6             & 1             & 12         \\ \hline
 	\end{tabular}
-	\label{table-eval-1}
-	\caption{Razrešenost konsenznih dreves in njihove vrednosti RF za vhodna drevesa na sliki \ref{img-eval-input}.}
+	\caption{\label{table-eval-1}Razrešenost konsenznih dreves in njihove vrednosti RF za vhodna drevesa na sliki \ref{img-eval-input}.
+    }
 	}
 	\end{center}		
 \end{table}
 
-Tabela \ref{table-eval-1} prikazuje razrešenost in vrednosti RF asimetričnega
+\noindent Tabela~\ref{table-eval-1} prikazuje razrešenost in vrednosti RF asimetričnega
 srednjega drevesa, dveh aproksimiranih asimetričnih srednjih dreves 
 (Bi-AMT in MM-AMT), striktnega, večinskega in adamovega konsenznega drevesa s 
 slike~\ref{img-eval-result} glede na vhodna drevesa s slike~\ref{img-eval-input}. 
@@ -1441,13 +1449,12 @@ vhodnemu drevesu kot drevo AMT, posledično pa je njegova razrešenost zaradi te
 	Večinski konsenz & 23          & 10            & 11            & 9             & 30         \\ \hline
 	Adamov konsenz   & 17          & 13            & 10            & 8             & 31         \\ \hline
 	\end{tabular}
-	\label{table-eval-2}
-	\caption{Razrešenost konsenznih dreves in njihove vrednosti RF za vhodna drevesa na sliki \ref{img-eval-input-2}.}
+	\caption{\label{table-eval-2}Razrešenost konsenznih dreves in njihove vrednosti RF za vhodna drevesa na sliki \ref{img-eval-input-2}.}
 	}
 	\end{center}		
 \end{table}
 
-Rezultati konsenznih dreves s slike \ref{img-eval-result-2} glede na vhodna 
+\noindent Rezultati konsenznih dreves s slike \ref{img-eval-result-2} glede na vhodna 
 drevesa s slike \ref{img-eval-input-2} so prikazani v tabeli \ref{table-eval-2}. 
 Ponovno sta asimetrično srednje drevo ter večinsko konsenzno drevo polno 
 razrešeni. Če ti dve drevesi medsebojno primerjamo še po podobnosti vhodnim 
@@ -1480,7 +1487,7 @@ vhodnih dreves.
 	\label{img-eval-input-3}
 \end{figure}
 
-Tretja vhodna množica dreves s slike \ref{table-eval-3} je sestavljena tako, 
+\noindent Tretja vhodna množica dreves s slike \ref{table-eval-3} je sestavljena tako, 
 da je število skupnih kladov majhno, posamezni kladi ne nastopajo v več kot 
 polovici vhodnih dreves in so večinoma medsebojno nekompatibilni. Rezultate
 dobljenih konsenznih dreves na sliki \ref{img-eval-input-3} prikazuje 
@@ -1498,8 +1505,7 @@ tabela~\ref{table-eval-3}.
 	Večinski konsenz & 10          & 0          & 2                & 3          & 1         & 6          \\ \hline
 	Adamov konsenz   & 7           & 3          & 3                & 2          & 2         & 10         \\ \hline
 	\end{tabular}
-	\label{table-eval-3}
-	\caption{Razrešenost konsenznih dreves in njihove vrednosti RF za vhodna drevesa na sliki \ref{img-eval-input-3}.}
+	\caption{\label{table-eval-3}Razrešenost konsenznih dreves in njihove vrednosti RF za vhodna drevesa na sliki \ref{img-eval-input-3}.}
 	}
 	\end{center}		
 \end{table}
@@ -1541,7 +1547,7 @@ za potrebe uvrstitve devetih prej še neobjavljenih sekvenc puščavskih zelenih
 Poleg njih vsebuje še štirinajst znanih puščavskih zelenih alg in 127 taksonomskih 
 enot prisotnih v tekoči vodi, morski vodi ali tleh. Drevesa so bila zgrajena s 
 pomočjo programa MrBayes z uporabo evolucijskega modela GTR. Poravnane sekvence, 
-ki so bile vhod v metodo bayesove inference, so bile dolge 1651 baznih parov~\cite{taxa150}.
+ki so bile vhod v metodo Bayesove inference, so bile dolge 1651 baznih parov~\cite{taxa150}.
 
 \begin{table}[h!]
 	\begin{center}
@@ -1563,8 +1569,7 @@ ki so bile vhod v metodo bayesove inference, so bile dolge 1651 baznih parov~\ci
 	RF (vsota)   & 2546 & 2389   & 2068    & 1470        & 2358        & 2242      \\ \hline
 	Čas [s]      & 293  & 164    & 11.5    & 0.3         & 3.5         & 15        \\ \hline 
 	\end{tabular}
-	\label{table-eval-alge}
-	\caption{
+	\caption{\label{table-eval-alge}
 	 Razrešenost konsenznih dreves in njihove vrednosti RF za deset filogenetskih dreves
 	 s 150 taksonomskimi enotami~\cite{taxa150}.
 	 }
@@ -1659,7 +1664,7 @@ pokazali, da v splošnem čas, potreben za izračun, lahko skokovito naraste. Oc
 lahko, da je uporaba natančne metode izračuna trenutno smotrna za srednje velike 
 vhodne podatke s 150 taksonomskimi enotami in do 50 drevesi, dejanske številke pa so odvisne od
 lastnosti vhodnih dreves. V primeru težav lahko posežemo po aproksimacijskih metodah, 
-kjer na težave s časom izvajanja nebi smeli naleteti.
+kjer na težave s časom izvajanja ne bi smeli naleteti.
 
 \begin{table}[h!]
 	\begin{center}
@@ -1730,7 +1735,7 @@ asimetričnega srednjega drevesa v programski paket Biopython. Čeprav je račun
 kompleksnost metode v splošnem eksponentna (sliki~\ref{img-eval-timing-trees} 
 in~\ref{img-eval-timing-taxons}), kar je nezaželeno, in se problemi z
 izvajalnim časom za natančno metodo pojavijo hitro, ima uporabnik možnost namestitve 
-zunanjega programa PMC, ki bistveno pospeši izvajanje. Kljub temu je za velike vhodne 
+zunanjega programa PMC, ki bistveno pohitri izvajanje. Kljub temu je za velike vhodne 
 množice dreves izračun lahko dolgotrajen, čeprav to ne velja v splošnem,
 saj lastnosti vhodnih dreves (število kompatibilnih poddreves) igrajo velik faktor pri
 iskanju največje neodvisne množice, ki je računsko najintenzivnejši del. Če 
@@ -1759,7 +1764,7 @@ primerljivi razrešenosti glede na večinsko konsenzno drevo običajno proizvedl
 ki se slabše ujema z vhodnimi drevesi. 
 
 Možnosti za izboljšave vidimo predvsem pri aproksimacijskih algoritmih. Nad drevesi,
-izračunanimi s pomočjo prvega aproksimacijskega algoritma, bi npr. lahko ponovno 
+izračunanimi s pomočjo prvega aproksimacijskega algoritma, bi, npr., lahko ponovno 
 izračunali konsenzna drevesa in izbrali najboljšega. Poleg tega bi lahko
 izračun asimetričnega srednjega drevesa za vsak par vhodnih dreves opravili paralelno. 
 
@@ -1900,6 +1905,9 @@ dostopno na:\\ http://en.wikipedia.org/wiki/Phylogenetics
 Matching (Graph Theory),
 dostopno na: \\ http://en.wikipedia.org/wiki/Matching\_(graph\_theory)
 
+\bibitem{clustalw2_phylogeny}
+Spletni vmesnik ClustalW2 Phylogeny,
+dostopno na: \\ http://www.ebi.ac.uk/Tools/phylogeny/clustalw2\_phylogeny
 
 \end{thebibliography}
 
