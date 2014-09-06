@@ -1561,7 +1561,7 @@ ki so bile vhod v metodo bayesove inference, so bile dolge 1651 baznih parov~\ci
 	RF($T_9$)    & 250  & 243    & 196     & 147         & 232         & 231       \\ \hline
 	RF($T_{10}$) & 260  & 233    & 212     & 147         & 232         & 213       \\ \hline
 	RF (vsota)   & 2546 & 2389   & 2068    & 1470        & 2358        & 2242      \\ \hline
-	Čas [s]      & 164  & 293    & 11.5    & 0.3         & 3.5         & 15        \\ \hline 
+	Čas [s]      & 293  & 164    & 11.5    & 0.3         & 3.5         & 15        \\ \hline 
 	\end{tabular}
 	\label{table-eval-alge}
 	\caption{
@@ -1582,14 +1582,15 @@ metoda asimetričnega srednjega drevesa pa najbolj drzna, s čimer podaja najve�
 o evolucijskih dogodkih. 
 
 Časovno se je najbolje odrezala metoda striktnega konsenza, sledi pa ji metoda večinskega
-konsenza. Aproksimacijska metoda MM-AMT je bila hitrejša od Adamsovega konsenza,
-najpočasnejša pa je bila metoda Bi-AMT.
+konsenza. Aproksimacijska metoda MM-AMT je bila hitrejša od Adamovega konsenza,
+najpočasnejša pa je bila natančna metoda.
 
 \section{Primerjava izvajalnih časov}
 Zaradi eksponentne časovne kompleksnosti metode asimetričnega srednjega drevesa nas 
 zanima, kako velika drevesa in vhodne množice lahko še obdelamo v doglednem času.
 Merjenje časa izvajanja smo opravili za natančno metodo, obe aproksimacijski metodi
 in tudi natančno metodo z nameščenim programom PMC.   
+Numerične vrednosti meritev so prikazane v tabeli~\ref{table-eval-timing}.
 
 Zgornji graf na sliki~\ref{img-eval-timing-trees} prikazuje čase izvajanja za
 drevesa, ki imajo dvajset taksonomskih enot. Opazimo, da se čas izvajanja z 
@@ -1653,12 +1654,75 @@ Zaključimo torej lahko, da je izračun asimetričnega srednjega drevesa s pomo�
 metode za večje vhodne množice smotrn le z uporabo
 zunanjega programa PMC. Tudi tu sicer naletimo na težave, vendar precej pozneje. Primer 
 puščavskih zelenih alg, ki vsebuje 150 taksonomskih enot in deset dreves, smo naprimer 
-uspeli izračunati v dvajsetih minutah, medtem ko so naključno generirani primeri 
+uspeli izračunati v petih minutah, medtem ko so naključno generirani primeri 
 pokazali, da v splošnem čas, potreben za izračun, lahko skokovito naraste. Ocenimo
 lahko, da je uporaba natančne metode izračuna trenutno smotrna za srednje velike 
 vhodne podatke s 150 taksonomskimi enotami in do 50 drevesi, dejanske številke pa so odvisne od
 lastnosti vhodnih dreves. V primeru težav lahko posežemo po aproksimacijskih metodah, 
 kjer na težave s časom izvajanja nebi smeli naleteti.
+
+\begin{table}[h!]
+	\begin{center}
+	{\footnotesize
+	\begin{tabular}{ l| l | l | l | l | l }
+	
+	Št. taks. enot & Št. dreves & AMT [s]     & Bi-AMT [s] & MM-AMT [s]   & AMT (PMC) [s]  \\ \hline
+	20             & 10         & 41.457      & 8.177      & 3.141,    & 2.34       \\ \hline
+	%20             & 11         & 51.811      & 10.009    & 4.696     & 2.902      \\ \hline
+	20             & 12         & 81.37       & 11.338    & 5.818     & 3.003      \\ \hline
+	%20             & 13         & 137.08      & 13.175    & 5.399     & 3.362      \\ \hline
+	20             & 14         & 212.759     & 15.901    & 7.954     & 3.893      \\ \hline
+	%20             & 15         & 311.716     & 17.866    & 10.113    & 4.736      \\ \hline
+	20             & 16         & 366.422     & 19.429    & 13.749    & 4.743      \\ \hline
+	%20             & 17         & 602.671     & 21.855    & 15.613    & 5.191      \\ \hline
+	20             & 18         & 735.516     & 25.153    & 17.771    & 6.054      \\ \hline
+	%20             & 19         & 2132.701    & 28.104    & 15.766    & 6.264      \\ \hline
+	20             & 20         & 1455.173    & 29.329    & 16.85     & 7.192      \\ \hline
+	%20             & 21         & 3362.974    & 32.084    & 18.272    & 7.058      \\ \hline
+	20             & 22         & 2559.055    & 35.694    & 22.479    & 7.565      \\ \hline 
+	%20             & 23         & 5045.935    & 39.493    & 22.666    & 8.015      \\ \hline
+	20             & 24         & 4896.345    & 42.86     & 27.536    & 8.779      \\ \hline
+	%20             & 25         & 7293.029    & 46.281    & 28.537    & 9.379      \\ \hline
+	\hline
+	10             & 10         & 0.548       & 1.445     & 0.4108    & 0.355        \\ \hline
+	12             & 10         & 1.074       & 2.252     & 0.659     & 0.545        \\ \hline
+	14             & 10         &	2.062       & 3.252     & 1.045     & 0.854        \\ \hline
+	16             & 10         & 3.906       & 4.356     & 1.874     & 1.134        \\ \hline
+	18             & 10         & 13.484      & 5.629     & 2.2542    & 1.585        \\ \hline
+	20             & 10         & 34.7066     & 7.288     & 2.4592    & 2.032        \\ \hline
+	22             & 10         & 80.703      & 9.043     & 4.1872    & 2.572        \\ \hline
+	24             & 10         & 113.285     & 11.187    & 5.2434    & 3.295        \\ \hline
+	\hline
+	10             & 20         & 2.113       & 6.574     & 1.442     & 1.041        \\ \hline
+	12             & 20         & 3.412       & 10.151    & 3.235     & 1.822        \\ \hline
+	14             & 20         &	15.640      & 14.600     & 6.235     & 2.901        \\ \hline
+	16             & 20         & 65.634      & 19.856    & 9.570     & 4.232        \\ \hline
+	18             & 20         & 274.018     & 26.216    & 14.493    & 5.368        \\ \hline
+	20             & 20         & 34.7066     & 30.995    & 17.016    & 6.411        \\ \hline
+	22             & 20         & 1319.864    & 37.136    & 23.785    & 8.336        \\ \hline
+	24             & 20         & 3173.812    & 45.432    & 25.096    & 10.260       \\ \hline
+	\hline
+	50             & 10         & -           & 51.875    & 17.257    & 16.557      \\ \hline
+	50             & 12         & -           & 77.699    & 75.375    & 22.452      \\ \hline
+	50             & 14         & -           & 106.556   & 118.352   & 30.098      \\ \hline
+	50             & 16         & -           & 140.845   & 165.747   & 39.107      \\ \hline
+	50             & 18         & -           & 193.063   & 252.198   & 53.963      \\ \hline
+	50             & 20         & -           & 234.036   & 314.694   & 65.845      \\ \hline
+	50             & 22         & -           & 268.463   & 371.333   & 81.322      \\ \hline
+	50             & 24         & -           & 320.893   & 453.626   & 129.126     \\ \hline
+	50             & 26         & -           & 378.354   & 595.073   & 129.126     \\ \hline
+	50             & 28         & -           & 439.304   & 747.025   & 319.833     \\ \hline
+	50             & 30         & -           & 505.951   & 927.528   & 739.345     \\ \hline
+	50             & 32         & -           & 576.31    & 1114.376  & 1543.093    \\ \hline
+	50             & 34         & -           & 645.584   & 1235.684  & 2851.712    \\ \hline
+	\end{tabular}
+	\label{table-eval-timing}
+	\caption{
+	 Časi izvajanja vseh treh metod in natančne metode s pomočjo programa PMC.
+	 }
+	}
+	\end{center}		
+\end{table}
 
 \chapter{Zaključek}
 Najpomembnejši rezultat dela je zagotovo prva znana implementacija konsenzne metode
