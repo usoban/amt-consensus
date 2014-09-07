@@ -410,8 +410,26 @@ Družini.
 % povzetek
 \addcontentsline{toc}{chapter}{Povzetek}
 \chapter*{Povzetek}
-V vzorcu je predstavljen postopek priprave diplomskega dela z uporabo okolja \LaTeX. 
-Vaš povzetek mora sicer vsebovati približno 100 besed, ta tukaj je odločno prekratek.
+
+Filogenetsko drevo prikazuje evolucijska razmerja med taksonomskimi enotami. Pred 
+izumom računalnika so filogenetska drevesa risali ročno na podlagi morfoloških 
+značilnosti organizmov, danes pa jih gradimo programsko s pomočjo primerjave 
+sekvenc DNA ali RNA. Filogenetska drevesa so lahko pridobljena iz različnih virov 
+podatkov in podajajo nasprotujoče si evolucijske hipoteze. V potrebi 
+po združitvi teh hipotez v eno samo so nastale filogenetske konsenzne metode. 
+V pričujočem diplomskem delu obravnavamo metodo asimetričnega srednjega drevesa 
+za grajenje konsenza filogenetskih dreves. Obravnavali smo jo teoretično in jo 
+skupaj z dvema aproksimacijskima metodama implementirali v odprtokodni paket 
+Biopython. Uspešnost metode smo preizkusili na realnem in nekaj umetnih primerih 
+ter asimetrično srednje drevo primerjali z drevesi striktnega, večinskega in 
+Adamovega konsenza s pomočjo Robinson-Fouldsove mere in razrešenosti drevesa. 
+Rezultati kažejo, da je asimetrično srednje drevo velikokrat bilo najmanj podobno 
+vhodnim drevesom, a hkrati v vseh testnih primerih najbolj razrešeno drevo, s čimer 
+je podajalo največ informacij o evolucijskih razmerjih med taksonomskimi enotami. 
+Izmerili smo čase izvajanja, ki so pokazali, da teoretična eksponentna časovna 
+zahtevnost natančne metode lahko povzroči težave, katerim pa se na račun nekoliko 
+slabše razrešenosti drevesa izognemo z uporabo ene izmed aproksimacijskih metod, 
+ki imata polinomsko časovno zahtevnost. 
 \bigskip
 
 \noindent\textbf{Ključne besede:} \tkeywords.
@@ -423,8 +441,25 @@ Vaš povzetek mora sicer vsebovati približno 100 besed, ta tukaj je odločno pr
 \selectlanguage{english}
 \addcontentsline{toc}{chapter}{Abstract}
 \chapter*{Abstract}
-This sample document presents an approach to typesetting your BSc thesis using \LaTeX. 
-A proper abstract should contain around 100 words which makes this one way too short.
+Phylogenetic tree displays evolutionary relationships between taxonomical units. 
+Before the invention of computer, phylogenetic trees had been drawn by hand on 
+the basis of morphological properties of organisms. Today, however, they are 
+constructed programatically by comparing DNA or RNA sequences. Phylogenetic 
+trees can be acquired from different sources of data and in turn offer 
+contradictory hypotheses of evolution. In the need of combining these hypotheses 
+into a single one, phylogenetic consensus methods were introduced. In this thesis 
+we address asymmetric median tree metod for construction of phylogenetic trees. 
+We've treated it theoretically and, along with two approximation methods, 
+implemented it within open-source package Biopython. The performance was evaluated 
+against one real and a few artificial cases, where we've compared asymmetric median 
+tree  with strict, majority and Adam consensus trees with the help of Robinson-Foulds 
+metric and tree resolution. The results show that asymmetric median tree was often the 
+least similar tree with respect to the input trees, but at the same time, it was the 
+most resolved tree in all test cases and therefore offered more information about 
+evolutionary history of taxonomical units than any other consensus method. The timings 
+show that theoretical exponential time complexity of the exact method can indeed cause 
+trouble, which can be avoided by using one of the approximation methods that run in
+polynomial time on the account of reduced tree resolution.
 \bigskip
 
 \noindent\textbf{Keywords:} \tkeywordsEn.
@@ -1750,7 +1785,7 @@ aproksimacijske metode je, kot smo pokazali tudi eksperimentalno, odvisna
 predvsem od lastnosti dreves v vhodni množici. 
 
 Kot smo pokazali na štirih vhodnih množicah, asimetrično srednje drevo ni nujno 
-tisto, ki drevesa vhodne množice glede na Robinson-Fouldsovo metriko povzema 
+tisto, ki drevesa vhodne množice glede na Robinson-Fouldsovo mero povzema 
 najbolje. Prav tako kot pri izbiri aproksimacijske metode tudi tukaj velja, da 
 je izbira konsenzne metode odvisna predvsem od predhodnega poznavanja lastnosti 
 dreves vhodne množice. Če ta vsebujejo veliko število nekompatibilnih parov 
@@ -1776,7 +1811,7 @@ izračun asimetričnega srednjega drevesa za vsak par vhodnih dreves opravili pa
 Eksponentni čas za konstrukcijo asimetričnega srednjega drevesa bi lahko zmanjšali z 
 uporabo katerega izmed aproksimacijskih algoritmov za iskanje največje neodvisne množice.
 Prav tako bi bilo zanimivo določiti lastnosti množice vhodnih dreves, za katero bi 
-metoda asimetričnega srednjega drevesa data boljše rezultate od ostalih konsenznih metod.
+metoda asimetričnega srednjega drevesa dala boljše rezultate od ostalih konsenznih metod.
 
 \addcontentsline{toc}{chapter}{Literatura}
 \begin{thebibliography}{99}
@@ -2062,6 +2097,9 @@ for n in N_TAXONS:
 \end{figure}
 
 \chapter{Programska koda metode {\it Bio.Phylo.Consensus.amt\_consensus}\label{appendix-code-amt_consensus}}
+
+Programska koda se bo v prihodnosti lahko še spreminjala. Zadnja različica programske
+kode je prosto dostopna na spletnem naslovu \url{https://github.com/usoban/biopython}.
 
 \begin{python}
 def amt_consensus(trees, method='no_approx'):
