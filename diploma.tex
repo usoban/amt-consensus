@@ -37,7 +37,25 @@
 \hyphenation{ko-mpa-ti-bi-lno-sti}
 \hyphenation{pre-dsta-vi-tve}
 \hyphenation{vme-sni-ka}
-
+\hyphenation{vho-dnih}
+\hyphenation{ta-kso-no-mska}
+\hyphenation{sku-pne-ga}
+\hyphenation{info-rma-ci-ji}
+\hyphenation{ne-ko-mpa-ti-bi-lna}
+\hyphenation{inte-rpre-ti-ra-mo}
+\hyphenation{ve-ndar}
+\hyphenation{na-sle-dnjem}
+\hyphenation{sku-pnih}
+\hyphenation{po-dmo-du-la}
+\hyphenation{opra-vi-mo}
+\hyphenation{ko-mple-me-nta-rne-ga}
+\hyphenation{ta-kso-no-mski-mi}
+\hyphenation{izho-dnih}
+\hyphenation{pri-me-rja-nje}
+\hyphenation{mo-du-la}
+\hyphenation{imple-me-nti-ra}
+\hyphenation{ne-ko-mpa-ti-bi-lno-sti}
+\hyphenation{bi-pa-rti-tne-ga}
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %	DIPLOMA INFO
@@ -935,18 +953,12 @@ na čim nižjem nivoju v končnem drevesu, tako da je klad $j$ še v celoti vseb
 
 \noindent Če velja enačba \ref{eq:9}, potem za matriko $M'$ obstaja filogenetsko 
 drevo~\cite{gd}. V tem primeru se lahko lotimo njegove konstrukcije. Najprej 
-ustvarimo graf, v katerega kot vozlišča dodamo koren bodočega drevesa $r$ in za 
-vsak $j \in I_j$ svoje vozlišče $v_j$. Nato za vsako vozlišče $v_j$, za katerega 
-velja $P(j) > 0$, ustvarimo povezavo $(v_{P(j)}, v_j)$ in jo označimo z $j$. 
-Vsa preostala vozlišča $v_j$, za katere velja $P(j) = 0$, povežemo s korenom 
-drevesa s pomočjo povezave $(r, v_j)$, in prav tako označimo z $j$. Primer takega
+ustvarimo graf, v katerega kot vozlišča dodamo koren bodočega drevesa $v_0$ in za 
+vsak $j \in I_j$ svoje vozlišče $v_j$. Nato za vsako vozlišče $v_j$ ustvarimo
+povezavo $(v_{P(j)}, v_j)$ in jo označimo z $j$. Primer takega
 grafa, konstruiranega za matriko $M'$ s slike \ref{img-reconstruct-m} je prikazan
 na levi strani slike \ref{img-reconstruct-1}. Tak graf je že drevo, vendar je potrebno 
 razrešiti oznake na povezavah.
-
-% {\bf TODO: Zakaj je tu koren označe z r? Ne bi v\_0 tudi bilo ok. Potem ne
-% bi imel več izjeme, da moraš vozlisca j, za katera je $P(j)==0$,
-% obravnavati posebej? }
 
 Ker vsaka vrstica matrike $M'$ predstavlja eno taksonomsko enoto, lahko oznake povezav
 določimo tako, da pregledujemo matriko po vrsticah. Za vsak $i \in I_i$ najdemo največji 
@@ -1627,11 +1639,6 @@ enot hitrejša od metode MM-AMT.
 	 }
 	\label{img-eval-timing-taxons}
 \end{figure}
-
-%{\bf TODO: Grafi so zelo fajn. Bi bilo pa vseeno dobro izpisati tudi
-%tabelo. Predvsem, da se vidi čase izvajanja (AMT, modra linija), ki zdaj
-%niti ne morejo biti prikazani, ne da bi zaradi tega stisnili ostale tri
-%grafe preveč skupaj.}
 
 Slika~\ref{img-eval-timing-taxons} prikazuje grafa časov izvajanja glede na število 
 taksonomskih enot pri fiksnem številu dreves. Zgornji graf  prikazuje izvajalne čase
