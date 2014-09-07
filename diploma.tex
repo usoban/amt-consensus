@@ -808,7 +808,7 @@ $Epsilon$ in $Delta$ neposrednega skupnega prednika, tretje drevo temu nasprotuj
 		\includegraphics[scale=0.7, clip=true, trim=2cm 2cm 2cm 2cm]{gfx/incompat_graph.pdf}
 	\end{center}
 	\caption{
-		Graf nekompatibilnosti bitnih nizov za vhodna drevesa iz 
+		Graf nekompatibilnosti binarnih nizov za vhodna drevesa iz 
 		slike~\ref{img-input-trees}. Vozlišča predstavljajo unikatne binarne 
 		nize iz vseh dreves vhodne množice $T$, povezave pa so vzpostavljene 
 		med pari vozlišč, katerih binarni nizi medsebojno niso kompatibilni.
@@ -1011,9 +1011,9 @@ množice hkrati~\cite{pw}.
 		\includegraphics[scale=0.65, clip=true, trim=2cm 1cm 1cm 2cm]{gfx/maxmatch_graph.pdf}
 	\end{center}
 	\caption{
-		Primer računanja bitnih nizov asimetričnega srednjega drevesa s pomočjo 
+		Primer računanja binarnih nizov asimetričnega srednjega drevesa s pomočjo 
 		največjega ujemanja. Robovi, ki spadajo v množico največjega ujemanja 
-		$E_{M}$, so obarvani modro, njihova krajišča pa rdeče. Vsi bitni nizi, 
+		$E_{M}$, so obarvani modro, njihova krajišča pa rdeče. Vsi binarni nizi, 
 		ki so obarvani črno, sestavljajo končno drevo.
 	}
 	\label{img-maxmatch}
@@ -1054,14 +1054,14 @@ izračunom in ni vezan na končni format.
 
 \section{Podrobnosti implementacije}
 Glavna entiteta, ki je nastopala v obravnavi metode asimetričnega srednjega 
-drevesa, je bil bitni niz. Zato je pomembno, da zanj uporabimo primerno hitro 
+drevesa, je bil binarni niz. Zato je pomembno, da zanj uporabimo primerno hitro 
 podatkovno strukturo. Razred, ki podatkovno strukturo že implementira, se 
 imenuje $\_BitString$, prebiva pa v podmodulu $Bio.Phylo.Consensus$. 
 $\_BitString$ razširja Pythonovo vgrajeno podatkovno strukturo $String$, 
 zato ga lahko uporabljamo na enak način. Med operatorji, ki jih lahko izvajamo 
 nad podatkovno strukturo, so konjunkcija, disjunkcija in ekskluzivna 
 disjunkcija nad posameznimi mesti, vsebuje pa tudi metodi za preverjanje 
-vsebovanosti enega bitnega niza v drugem ter preverjanje kompatibilnosti 
+vsebovanosti enega binarnega niza v drugem ter preverjanje kompatibilnosti 
 dveh binarnih nizov. 
 
 \subsection{Izračun največje neodvisne množice}
@@ -1379,8 +1379,6 @@ vrednosti RF.
 	\label{img-eval-input}
 \end{figure}
 
-{\bf TODO: drevesa na sliki so označena z "Vhodno drevo 1", v tabelah pa se na njih sklicujes "T1". Poenoti.}
-
 \begin{table}[h!]
 	\begin{center}
 	{\footnotesize
@@ -1481,7 +1479,7 @@ vhodnih dreves.
 \section{Vhodna množica 3}
 \begin{figure}[h!]
 	\begin{center}
-		\includegraphics[scale=0.63, clip=true, trim=0 2cm 0 0.5cm]{gfx/eval_input_3.pdf}
+		\includegraphics[scale=0.62, clip=true, trim=0 2cm 0 0.5cm]{gfx/eval_input_3.pdf}
 	\end{center}
 	\caption{Tretja vhodna množica dreves.}
 	\label{img-eval-input-3}
