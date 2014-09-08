@@ -35,7 +35,7 @@
 %	DIPLOMA INFO
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \newcommand{\ttitle}{Implementacija metode asimetričnega srednjega drevesa za iskanje konsenza filogenetskih dreves}
-\newcommand{\ttitleEn}{Implementation of asymmetric median tree method for the identification of a consensus phylogenetic tree}
+\newcommand{\ttitleEn}{Implementation of asymmetric median tree method for the computation of a consensus phylogenetic tree}
 \newcommand{\tsubject}{\ttitle}
 \newcommand{\tsubjectEn}{\ttitleEn}
 \newcommand{\tauthor}{Urban Soban}
@@ -432,7 +432,7 @@ skušamo združiti v eno samo hipotezo oziroma konsenzno drevo. V diplomskem
 delu obravnavamo konsenzno metodo asimetričnega srednjega drevesa. Le-to in
 še dve aproksimacijski metodi smo implementirali v odprtokodnem paketu
 Biopython. Uspešnost metode asimetričnega srednjega drevesa smo primerjali
-z uspešnostmi metod za gradnjo striktnega, večinskega in Adamovega
+z uspešnostmi metod za gradnjo striktnega, večinskega in Adamsovega
 konsenza, na nekaj umetnih in enem dejanskem primeru. Pridobljena drevesa
 smo ovrednotili z uporabo Robinson-Fouldsove mere in mere razrešenosti
 drevesa. Asimetrično srednje drevo je velikokrat najmanj podobno vhodnim
@@ -444,6 +444,11 @@ evolucijskih razmerjih med taksonomskimi enotami.
 % TODO: še ti preveri. Prav vseh rezultatov ne bi pisal v
 % povzetek. Le tiste najbolj pomembne.
 % Ustrezno popravi še angleško verzijo.
+
+% TODO: Adam vs. Adams. Kolikor vem, je pravilno Adams. V Biopythonu pa
+% uporabljajo Adam. Jaz bi v besedilu in tudi primerih uporabljal Adams.
+% Če se tako odločiš, potem popravi tudi slike in tabele,
+% kjer piše "Adamov," v "Adamsov."
 
 \noindent\textbf{Ključne besede:} \tkeywords.
 % prazna stran
@@ -465,7 +470,7 @@ applying phylogenetic consensus methods. In this thesis we describe the
 asymmetric median tree method for construction of consensus phylogenetic
 trees. We implemented this and two other approximation methods within the
 open-source package Biopython. We have compared asymmetric median tree
-method with methods for strict, majority and Adam consensus trees on a
+method with methods for strict, majority and Adams consensus trees on a
 number of artificial and one real data set. The comparisons were evaluated
 using the Robinson-Foulds and the tree resolution metrics. The results show
 that asymmetric median tree is often the least similar to the input trees.
@@ -672,7 +677,7 @@ so nekatere najbolj pogoste konsenzne metode:
 	      razlik glede na drevesa v vhodni množici. Večinsko drevo je prav tako 
 	      srednje drevo, kar pomeni, da vedno obstaja vsaj eno srednje drevo~\cite{pw}.
 	
-	\item Adamov konsenz je drevo, ki ohrani strukturo poddreves, prisotnih v vseh 
+	\item Adamsov konsenz je drevo, ki ohrani strukturo poddreves, prisotnih v vseh 
 	      vhodnih drevesih. Vedno obstaja, vendar lahko vsebuje poddrevesa, ki niso 
 	      prisotna v nobenem drevesu vhodne množice~\cite{classification}.
 	      
@@ -1105,7 +1110,7 @@ tudi metode vzorčenja razmnoževanje primerov (angl., bootstrap) in izloči ene
 
 Izračun konsenznih filogenetskih dreves je mogoč s pomočjo podmodula 
 $Bio.Phylo.Consensus$, v katerem so bile najprej implementirane metode 
-striktnega, večinskega in adamovega konsenza, zdaj pa izračun lahko 
+striktnega, večinskega in Adamsovega konsenza, zdaj pa izračun lahko 
 opravimo tudi s pomočjo metode asimetričnega srednjega drevesa. Branje 
 in pisanje dreves je že omogočeno za formate Newick, CDAO in PhyloXML. 
 Modul ponuja tudi vmesno reprezentacijo drevesa, ki ga uporabljamo med 
@@ -1343,7 +1348,7 @@ konstruktorju metode največje varčnosti v vrstici 17.
 Zdaj imamo pripravljeno vse, da lahko v vrsticah 20-22 s pomočjo prej ustvarjenih 
 konstruktorjev dreves iz vhodnih sekvenc DNA zgradimo tri filogenetska drevesa. 
 Nato v vrsticah 25-27 iz zgrajenih dreves izračunamo še konsenzna drevesa s 
-pomočjo metod asimetričnega srednjega drevesa, večinskega konsenza in adamovega konsenza.
+pomočjo metod asimetričnega srednjega drevesa, večinskega konsenza in Adamsovega konsenza.
 Tako kot v prvem primeru uporabe za konec izračunana konsenzna drevesa še izrišemo, 
 kar naredimo s pomočjo paketa {\it pyplot}.
 
@@ -1376,8 +1381,8 @@ trees = [
 # Izracunamo konsenzna filogenetska drevesa
 amt = amt_consensus(trees, method='no_approx')
 majority = majority_consensus(trees)
-adam = adam_consensus(trees)
-for i, t in enumerate([amt, majority, adam]):
+adams = adam_consensus(trees)
+for i, t in enumerate([amt, majority, adams]):
     f = pyplot.figure(i)
     f.clf()
     Phylo.draw(t)
@@ -1395,7 +1400,7 @@ najbližjih sosedov in metode največje varčnosti iz vhodnih sekvenc DNA.
 \chapter{Eksperimentalna primerjava}
 
 Vse tri implementirane metode računanja asimetričnega srednjega drevesa želimo 
-primerjati med seboj in glede na metode striktnega, večinskega ter adamovega 
+primerjati med seboj in glede na metode striktnega, večinskega ter Adamsovega 
 konsenza. Za ta namen smo pripravili tri vhodne množice in en dejanski primer,
 na katerih smo ovrednotili algoritme glede na razrešenost končnega drevesa ter 
 glede na Robinson-Fouldsovo mero. 
@@ -1453,7 +1458,7 @@ vrednosti RF.
 	MM-AMT           & 13          & 3             & 4             & 5             & 12         \\ \hline
 	Striktni konsenz & 10          & 6             & 5             & 2             & 13         \\ \hline
 	Večinski konsenz & 17          & 2             & 5             & 4             & 11         \\ \hline
-	Adamov konsenz   & 11          & 5             & 6             & 1             & 12         \\ \hline
+	Adamsov konsenz  & 11          & 5             & 6             & 1             & 12         \\ \hline
 	\end{tabular}
 	\caption{\label{table-eval-1}Razrešenost konsenznih dreves in njihove vrednosti RF za vhodna drevesa na sliki \ref{img-eval-input}.
     }
@@ -1463,7 +1468,7 @@ vrednosti RF.
 
 \noindent Tabela~\ref{table-eval-1} prikazuje razrešenost in vrednosti RF asimetričnega
 srednjega drevesa, dveh aproksimiranih asimetričnih srednjih dreves 
-(Bi-AMT in MM-AMT), striktnega, večinskega in adamovega konsenznega drevesa s 
+(Bi-AMT in MM-AMT), striktnega, večinskega in Adamsovega konsenznega drevesa s 
 slike~\ref{img-eval-result} glede na vhodna drevesa s slike~\ref{img-eval-input}. 
 Opazimo, da je asimetrično srednje drevo glede na razrešenost prav tako dobro 
 kot večinsko konsenzno drevo. Obe drevesi sta polno razrešeni. Glede na
@@ -1509,7 +1514,7 @@ vhodnemu drevesu kot drevo AMT, posledično pa je njegova razrešenost zaradi te
 	MM-AMT           & 14          & 10            & 9             & 7             & 26         \\ \hline
 	Striktni konsenz & 15          & 7             & 8             & 8             & 23         \\ \hline
 	Večinski konsenz & 23          & 10            & 11            & 9             & 30         \\ \hline
-	Adamov konsenz   & 17          & 13            & 10            & 8             & 31         \\ \hline
+	Adamsov konsenz  & 17          & 13            & 10            & 8             & 31         \\ \hline
 	\end{tabular}
 	\caption{\label{table-eval-2}Razrešenost konsenznih dreves in njihove vrednosti RF za vhodna drevesa na sliki \ref{img-eval-input-2}.}
 	}
@@ -1524,7 +1529,7 @@ drevesom, se je najbolje odrezalo asimetrično srednje drevo. Nekoliko slabše
 razrešeno je drevo Bi-AMT, ki je sicer glede na metriko RF nekoliko bolj 
 podobno vhodnim drevesom kot asimetrično srednje drevo. Drevo MM-AMT je sicer
 po podobnosti še boljše, vendar je manj podobno in za povrh še manj razrešeno
-kot striktno konsenzno drevo. Adamovo konsenzno drevo je kljub slabši razrešenosti
+kot striktno konsenzno drevo. Adamsovo konsenzno drevo je kljub slabši razrešenosti
 najmanj podobno vhodnim drevesom.
 
 \begin{figure}[h!]
@@ -1565,7 +1570,7 @@ tabela~\ref{table-eval-3}.
 	MM-AMT           & 7           & 3          & 3                & 2          & 2         & 10         \\ \hline
 	Striktni konsenz & 7           & 3          & 3                & 2          & 2         & 10         \\ \hline
 	Večinski konsenz & 10          & 0          & 2                & 3          & 1         & 6          \\ \hline
-	Adamov konsenz   & 7           & 3          & 3                & 2          & 2         & 10         \\ \hline
+	Adamsov konsenz  & 7           & 3          & 3                & 2          & 2         & 10         \\ \hline
 	\end{tabular}
 	\caption{\label{table-eval-3}Razrešenost konsenznih dreves in njihove vrednosti RF za vhodna drevesa na sliki \ref{img-eval-input-3}.}
 	}
@@ -1574,7 +1579,7 @@ tabela~\ref{table-eval-3}.
 
 Opazimo, da sta polno razrešeni le asimetrično srednje drevo in aproksimirano 
 drevo Bi-AMT. Vsa ostala drevesa vsebujejo vsaj eno nerazrešeno vozlišče. 
-Drevo MM-AMT je v tem primeru enako striktnemu konsenznemu drevesu in adamovem 
+Drevo MM-AMT je v tem primeru enako striktnemu konsenznemu drevesu in Adamsovemu 
 konsenznemu drevesu, tako po topologiji kot glede na razrešenost in metriko RF. 
 Preostala drevesa so glede na metriko RF sicer enakovredna, vendar ker drevo 
 večinskega konsenza ni polno razrešeno, lahko za najboljši drevesi razglasimo 
@@ -1583,7 +1588,7 @@ topologij.
 
 Slaba razrešenost drevesa MM-AMT je ponovno posledica majhnega števila skupnih
 kladov in v takem primeru je aproksimacija Bi-AMT boljša. Ker posamezni kladi 
-ne nastopajo v več kot polovici vhodnih dreves, metodama striktnega in adamovega 
+ne nastopajo v več kot polovici vhodnih dreves, metodama striktnega in Adamsovega 
 konsenza ni uspelo popolnoma razrešiti vseh vozlišč vhodnih dreves, saj so kladi 
 s premalo pojavitvami kaznovani. Asimetrično srednje drevo za razliko take klade
 vključi, če to prispeva k informiranosti drevesa.
@@ -1616,7 +1621,7 @@ ki so bile vhod v metodo Bayesove inference, so bile dolge 1651 baznih parov~\ci
 	{\footnotesize
 	\begin{tabular}{ l| l | l | l | l | l | l }
 	
-	~            & AMT  & Bi-AMT & MM-AMT  & Striktni k. & Večinski k. & Adamov k. \\ \hline
+	~            & AMT  & Bi-AMT & MM-AMT  & Striktni k. & Večinski k. & Adamsov k. \\ \hline
 	Res($T$)     & 298  & 279    & 242     & 151         & 284         & 259       \\ \hline
 	RF($T_1$)    & 238  & 233    & 206     & 147         & 220         & 225       \\ \hline
 	RF($T_2$)    & 260  & 255    & 204     & 147         & 232         & 215       \\ \hline
@@ -1649,7 +1654,7 @@ metoda asimetričnega srednjega drevesa pa najbolj drzna, s čimer podaja najve�
 o evolucijskih dogodkih. 
 
 Časovno se je najbolje odrezala metoda striktnega konsenza, sledi pa ji metoda večinskega
-konsenza. Aproksimacijska metoda MM-AMT je bila hitrejša od Adamovega konsenza,
+konsenza. Aproksimacijska metoda MM-AMT je bila hitrejša od Adamsovega konsenza,
 najpočasnejša pa je bila natančna metoda.
 
 \section{Primerjava časov izvajanja}
@@ -1815,7 +1820,7 @@ je asimetrično srednje drevo, v primerjavi z ostalimi metodami, vedno najbolje 
 informacij o evolucijski zgodovini. 
 Tega sicer ne moremo trditi za obe aproksimacijski metodi. Metoda z izračunom 
 največjega ujemanja je bila po razrešenosti v nekaterih primerih primerljiva zgolj 
-s striktnim konsenznim drevesom, v drugih pa je bila nekoliko boljša od adamovega 
+s striktnim konsenznim drevesom, v drugih pa je bila nekoliko boljša od Adamsovega 
 konsenznega drevesa. Metoda z izračunom drevesa iz dveh vhodnih dreves je ob 
 primerljivi razrešenosti glede na večinsko konsenzno drevo običajno proizvedla drevo,
 ki se slabše ujema z vhodnimi drevesi. 
@@ -1987,7 +1992,7 @@ amts = {
 other = {
     'Strict': cons.strict_consensus(trees),
     'Majority': cons.majority_consensus(trees),
-    'Adam': cons.adam_consensus(trees)
+    'Adams': cons.adam_consensus(trees)
 }
 
 def _plot(nx, ny, fig, i, tree, title):
