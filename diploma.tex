@@ -398,7 +398,7 @@ Družini.
   {\bf MIS} & maximum independent set & največja neodvisna množica \\
   {\bf UPGMA} & unweighted pair group method with arithmetic mean & neuteženo gručanje s pomočjo aritmetične sredine \\
   {\bf CDAO} & comparative data analysis ontology  & ontologija podatkov za primerjalno analizo \\
-  {\bf RF} & Robinson-Foulds distance & Robinson-Fouldsova metrika\\
+  {\bf RF} & Robinson-Foulds distance & Robinson-Fouldsova mera \\
 \end{tabular}
 
 
@@ -516,7 +516,7 @@ vključili implementacijo asimetričnega srednjega drevesa. Predstavili bomo tud
 jih pri tem uporabili. Uspešnost implementirane metode bomo eksperimentalno ocenili
 na treh vhodnih množicah, ki izražajo različne lastnosti, in na eni realni vhodni 
 množici. Rezultate bomo primerjali s tremi popularnimi konsenznimi metodami glede
-na razrešenost končnega drevesa in glede na Robinson-Fouldsovo metriko. 
+na razrešenost končnega drevesa in glede na Robinson-Fouldsovo mero. 
 Za  konec bomo preverili, za kakšno število dreves v vhodni množici je uporaba
 implementirane metode še dovolj hitra.
 
@@ -1386,7 +1386,7 @@ Vse tri implementirane metode računanja asimetričnega srednjega drevesa želim
 primerjati med seboj in glede na metode striktnega, večinskega ter adamovega 
 konsenza. Za ta namen smo pripravili tri vhodne množice in en dejanski primer,
 na katerih smo ovrednotili algoritme glede na razrešenost končnega drevesa ter 
-glede na Robinson-Fouldsovo metriko. 
+glede na Robinson-Fouldsovo mero. 
 Programska koda, s katero smo pridobili rezultate, je v 
 dodatku~\ref{app-code-metrics}. Poleg lastnosti izhodnih dreves nas je zanimal 
 tudi čas izvajanja vseh treh implementiranih metod, s čimer smo ocenili velikost 
@@ -1408,12 +1408,12 @@ je število povezav v drevesu čim večje.
 	RF(T_1, T_2) = \left|C(T_1) - C(T_2)\right| + \left|C(T_2) - C(T_1)\right|  \label{eq:rf}
 \end{align}
 
-\noindent Robinson-Fouldsova (RF) metrika je najbolj razširjena metrika za primerjanje 
+\noindent Robinson-Fouldsova (RF) mera je najbolj razširjena mera za primerjanje 
 filogenetskih dreves. Šteje število kladov (\ref{eq:rf}), ki si jih drevesi 
 ne delita~\cite{rf}. Za izračun vrednosti RF smo uporabili funkcijo 
 {\it symmetric\_difference()} iz paketa 
 DendroPy\footnote{\url{https://pythonhosted.org/DendroPy/}}, saj v paketu 
-Biopython metrika RF še ni implementirana. Vrednost RF smo izračunali za 
+Biopython mera RF še ni implementirana. Vrednost RF smo izračunali za 
 vsak par konsenznega in vhodnega drevesa, ter za vsako konsenzno drevo sešteli
 vrednosti RF.
 
@@ -2046,12 +2046,12 @@ for k in d_amts.keys() + d_other.keys():
 	{
 	\caption{
 		Testna programska koda za merjenje razrešenosti konsenznih dreves 
-		in Robinson-Fouldsove metrike. Koda naloži vhodno množico dreves 
+		in Robinson-Fouldsove mere. Koda naloži vhodno množico dreves 
 		in iz nje izračuna konsenzna drevesa s pomočjo šestih metod. 
 		Nato vhodna drevesa in izračunana drevesa izriše v PDF datoteki 
 		ter vsako drevo shrani v datoteko v formatu Newick. S pomočjo 
 		knjižnice DendroPy nato ta drevesa naloži in nad konsenznimi drevesi 
-		izračuna razrešenost ter Robinson-Fouldsovo metriko glede na 
+		izračuna razrešenost ter Robinson-Fouldsovo mero glede na 
 		vsako vhodno drevo.
 	}
 	}
