@@ -288,11 +288,6 @@ Rezultati diplomskega dela so intelektualna lastnina avtorja. Za
 objavljanje ali izkoriščanje rezultatov di\-plom\-ske\-ga dela je potrebno
 pisno soglasje avtorja, Fakultete za ra\-ču\-nal\-niš\-tvo in informatiko
 ter mentorja%
-\footnote{V dogovoru z mentorjem lahko kandidat diplomsko delo
-s pripadajočo izvorno kodo izda tudi pod katero izmed alternativnih licenc,
-ki ponuja določen del pravic vsem: npr. Creative Commons, GNU GPL. V tem
-primeru na to mesto vstavite opis licence, na primer
-tekst~\cite{licence}.}.}
 
 % TODO: meni je načeloma vseeno, za kaj se odločiš.
 % Najbrž je smiselno, ker del Biopythona, da daš isto licenco kot to ima
@@ -338,9 +333,6 @@ consensus tree. Use established metrics for the evaluation and comparison
 of derived phylogenetic trees on synthetic and real data. Measure and
 compare the time complexity of the tested consensus methods.
 
-% TODO: prosim, preveri (lektoriraj), če je razumljivo in brez napak
-
-
 
 
 
@@ -383,10 +375,9 @@ z vpisno številko \textbf{63100344}, sem avtor  diplomskega dela z naslovom:
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 % zahvala
 \thispagestyle{empty}\mbox{}\vfill\null\it%
-% TODO: napisi ali zbrisi
-Na tem mestu zapišite, komu se zahvaljujete za izdelavo diplomske naloge. Pazite, da 
-ne boste koga pozabili. Utegnil vam bo zameriti. Temu se da izogniti tako, da 
-pozabite na celo zahvalo.
+Zahvaljujem se svoji družini za neizmerno podporo tekom študija. Brez vas mi
+nebi uspelo. Prav tako se zahvaljujem mentorju doc.\ dr.\ Tomažu Curku za 
+pomoč pri nastajanju pričujočega diplomskega dela. 
 \rm\normalfont
 
 % prazna stran
@@ -439,8 +430,8 @@ Družini.
 
 Filogenetsko drevo prikazuje evolucijska razmerja med taksonomskimi
 enotami. Prva filogenetska drevesa so risali ročno, na podlagi morfoloških
-zna\-čil\-nos\-ti organizmov. Danes jih gradimo programsko, z uporabo različnih
-metod in na podlagi različnih virov podatkov, npr., primerjava DNA ali RNA.
+zna\-čil\-nos\-ti organizmov. Danes jih gradimo programsko z uporabo različnih
+metod in na podlagi različnih virov podatkov, npr., primerjavo DNA ali RNA.
 To mnogokrat privede do nasprotujočih si evolucijskih hipotez, ki jih nato
 skušamo združiti v eno samo hipotezo oziroma konsenzno drevo. V diplomskem
 delu obravnavamo konsenzno metodo asimetričnega srednjega drevesa. Le-to in
@@ -455,15 +446,6 @@ evolucijskih razmerjih med taksonomskimi enotami.
 
 \bigskip
 
-% TODO: še ti preveri. Prav vseh rezultatov ne bi pisal v
-% povzetek. Le tiste najbolj pomembne.
-% Ustrezno popravi še angleško verzijo.
-
-% TODO: Adam vs. Adams. Kolikor vem, je pravilno Adams. V Biopythonu pa
-% uporabljajo Adam. Jaz bi v besedilu in tudi primerih uporabljal Adams.
-% Če se tako odločiš, potem popravi tudi slike in tabele,
-% kjer piše "Adamov," v "Adamsov."
-
 \noindent\textbf{Ključne besede:} \tkeywords.
 % prazna stran
 \clearemptydoublepage
@@ -475,11 +457,11 @@ evolucijskih razmerjih med taksonomskimi enotami.
 \chapter*{Abstract}
 
 Phylogenetic tree displays evolutionary relationships between taxonomical
-units. First phylogenetic trees had been drawn by hand on the basis of
+units. First phylogenetic trees were drawn by hand on the basis of
 morphological properties of organisms. Nowadays, they are constructed
 programmatically by using different methods of inference and relying on
 various data sources, including DNA and RNA sequences. The resulting
-hypotheses of evolution are often contradictory, and need to be resolved by
+evolutionary hypotheses are often contradictory, and need to be resolved by
 applying phylogenetic consensus methods. In this thesis we describe the
 asymmetric median tree method for construction of consensus phylogenetic
 trees. We implemented this and two other approximation methods within the
@@ -1347,8 +1329,6 @@ programski paket PHYLIP.
 }
 \end{figure}
 
-% TODO: preveri, ce so vse reference na vrstice (tudi drugje) pravilne
-
 Najprej v vrstici 8 s pomočjo modula {\it Bio.AlignIO} iz vhodne datoteke uvozimo
 vnaprej poravnane sekvence DNA, ki pripadajo taksonomskim enotam. Nato v vrstici 11
 ustvarimo objekt tipa {\it DistanceCalculator}, ki služi za izračun distančne matrike. Tega
@@ -1425,10 +1405,6 @@ vhodne množice in število taksonomskih enot v drevesih, za katere zaradi
 predolgega časa izvajanja ni več smiselno uporabiti  natančne metode. Tudi koda za 
 merjenje časa je v dodatku~\ref{app-code-time}.
 
-
-% TODO: spodnji naslov sem najbrž jaz zamočil v eni od prejšnjih revizij.
-% Ker gre za dve meri, je prav, da sta obe omenjeni v naslovu.
-% Preveri, če je tako ok.
 
 \section[Razrešenost drevesa in Robinson-Fouldsova mera]{Razrešenost drevesa in\\ Robinson-Fouldsova mera}
 Razrešenost drevesa (\ref{eq:res}) je definirana kot število povezav, ki 
@@ -1703,7 +1679,7 @@ enot hitrejša od metode MM-AMT.
 \end{figure}
 \begin{figure}[h!]
 	\begin{center}
-		\fbox{\includegraphics[scale=0.54, clip=true, trim=0 0 0 0.5cm]{gfx/times_10_20_taxons.pdf}}
+		\fbox{\includegraphics[scale=0.50, clip=true, trim=0 0 0 0.5cm]{gfx/times_10_20_taxons.pdf}}
 	\end{center}
 	\caption{
 		Časi izvajanja vseh treh metod za vhodne množice 10 ali 20 dreves.
@@ -1849,8 +1825,8 @@ uporabo katerega izmed aproksimacijskih algoritmov za iskanje največje neodvisn
 Prav tako bi bilo zanimivo določiti lastnosti množice vhodnih dreves, za katero bi 
 metoda asimetričnega srednjega drevesa dala boljše rezultate od ostalih konsenznih metod.
 
-\addcontentsline{toc}{chapter}{Literatura}
 \begin{thebibliography}{99}
+\addcontentsline{toc}{chapter}{Literatura}
 
 \bibitem{cd}
 C.\ Darwin. ``Notebook B: Transmutation of species'', str. 36, 1837-1838.
