@@ -351,7 +351,7 @@ z vpisno številko \textbf{63100344}, sem avtor  diplomskega dela z naslovom:
 \end{itemize}
 
 \vspace{1cm}
-\noindent V Ljubljani, dne 11. januarja 2011 \hfill Podpis avtorja:
+\noindent V Ljubljani, dne 9. septembra 2014 \hfill Podpis avtorja:
 
 % prazna stran
 \clearemptydoublepage
@@ -359,6 +359,7 @@ z vpisno številko \textbf{63100344}, sem avtor  diplomskega dela z naslovom:
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 % zahvala
 \thispagestyle{empty}\mbox{}\vfill\null\it%
+% TODO: napisi ali zbrisi
 Na tem mestu zapišite, komu se zahvaljujete za izdelavo diplomske naloge. Pazite, da 
 ne boste koga pozabili. Utegnil vam bo zameriti. Temu se da izogniti tako, da 
 pozabite na celo zahvalo.
@@ -370,6 +371,7 @@ pozabite na celo zahvalo.
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 % posvetilo
 \thispagestyle{empty}\mbox{}{\vskip0.20\textheight}\mbox{}\hfill\begin{minipage}{0.55\textwidth}%
+% TODO: najbrz si to ti napisal in ni iz predloge
 Družini.
 \normalfont\end{minipage}
 
@@ -920,7 +922,7 @@ imenuje problem filogenije. Zanj obstaja algoritem s časovno kompleksnostjo $O(
 pri čemer je $n$ število taksonomskih enot, $m$ pa število binarnih nizov v največji
  neodvisni množici~\cite{gd}.
 
-Najprej kreiramo matriko M dimenzij $n×m$. Binarne nize, ki pripadajo vozliščem 
+Najprej ustvarimo matriko M dimenzij $n×m$. Binarne nize, ki pripadajo vozliščem 
 množice $V_{MIS}$, kot stolpce zložimo v matriko $M$. Nato stolpce interpretiramo 
 kot števila v binarnem zapisu, jih pretvorimo v desetiško obliko in sortiramo. 
 Odstranimo stolpce s podvojeno vrednostjo, tako da ostanejo le stolpci z unikatnimi 
@@ -1320,12 +1322,12 @@ programski paket PHYLIP.
 
 Najprej v vrstici 8 s pomočjo modula {\it Bio.AlignIO} iz vhodne datoteke uvozimo
 vnaprej poravnane sekvence DNA, ki pripadajo taksonomskim enotam. Nato v vrstici 11
-kreiramo objekt tipa {\it DistanceCalculator}, ki služi za izračun distančne matrike. Tega
-potrebujemo v naslednjih dveh vrsticah, kjer kreiramo konstruktor dreves tipa 
+ustvarimo objekt tipa {\it DistanceCalculator}, ki služi za izračun distančne matrike. Tega
+potrebujemo v naslednjih dveh vrsticah, kjer ustvarimo konstruktor dreves tipa 
 {\it DistanceTreeConstructor} za metodo UPGMA in metodo združevanja najbližjih sosedov.
 Metoda največje varčnosti za razliko od distančnih metod potrebuje objekt tipa
-{\it ParsimonyScorer}, ki ga kreiramo v vrstici 15, in preiskovalnik prostora 
-dreves tipa {\it NNITreeSearcher}, ki ga kreiramo vrstico nižje. Oba objekta podamo
+{\it ParsimonyScorer}, ki ga ustvarimo v vrstici 15, in preiskovalnik prostora 
+dreves tipa {\it NNITreeSearcher}, ki ga ustvarimo vrstico nižje. Oba objekta podamo
 konstruktorju metode največje varčnosti v vrstici 17.
 
 Zdaj imamo pripravljeno vse, da lahko v vrsticah 20-22 s pomočjo prej ustvarjenih 
