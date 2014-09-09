@@ -378,8 +378,9 @@ z vpisno številko \textbf{63100344}, sem avtor  diplomskega dela z naslovom:
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 % zahvala
 \thispagestyle{empty}\mbox{}\vfill\null\it%
+
 Zahvaljujem se svoji družini za neizmerno podporo tekom študija. Brez vas mi
-nebi uspelo. Prav tako se zahvaljujem mentorju doc.\ dr.\ Tomažu Curku za 
+ne bi uspelo. Prav tako se zahvaljujem mentorju doc.\ dr.\ Tomažu Curku za 
 pomoč pri nastajanju pričujočega diplomskega dela. 
 \rm\normalfont
 
@@ -616,8 +617,8 @@ drevo za vsako lokacijo vhodnih sekvenc posebej, nato pa še produkt teh vrednos
 ki predstavlja končno verjetje drevesa. Verjetje drevesa ne predstavlja verjetnosti, 
 da je to drevo dejansko pravilno. 
 
-\subsection{Bayesova inferenca}
-Bayesova inferenca je še en statistični pristop k iskanju filogenetskega drevesa. 
+\subsection{Bayesovsko sklepanje}
+Bayesovsko sklepanje (angl., inference) je še en statistični pristop k iskanju filogenetskega drevesa. 
 Zamisli o uporabi Bayesovega teorema so se pojavile že konec šestdesetih let, 
 vendar do nedavnega implementacija takih algoritmov ni bila smiselna zaradi velike
 računske zahtevnosti. Od metode maksimalnega verjetja se razlikuje zaradi uporabe 
@@ -718,7 +719,7 @@ Vse zgoraj opisane metode so že implementirane v samostojnih programskih paketi
 		  verjetja. Poleg tega ponuja programe za vzorčenje primerov in program
 	      za izračun konsenznega drevesa s pomočjo striktnega ter večinskega konsenza. 
 	      Korekcije razdalj je mogoče opraviti z evolucijskimi modeli JC69, K80 in F84~\cite{phylip}.
-	\item MrBayes, ki izračun filogenetskega drevesa opravi s pomočjo Bayesove inference. 
+	\item MrBayes, ki izračun filogenetskega drevesa opravi s pomočjo bayesovskega sklepanja. 
 		  Za izračun posteriorne verjetnostne porazdelitve uporablja markove verige v 
 		  kombinaciji z Metropolis-Hastingsovim algoritmom za učinkovito preiskovanje 
 	      prostora topologij. Ker na izhodu proizvede mnogo dreves, ponuja tudi 
@@ -733,7 +734,7 @@ Vse zgoraj opisane metode so že implementirane v samostojnih programskih paketi
 	\item HashCS, program za izračun konsenza filogenetskih dreves, ki šteje za 
 		  enega najhitrejših programov te vrste. Implementira lastni algoritem, ki 
 		  teče v polinomskem času. Ker je bil izdelan z namenom hitrejšega povzemanja 
-		  dreves, ki so rezultat enega izmed algoritmov z uporabo Bayesove inference, 
+		  dreves, ki so rezultat enega izmed algoritmov z uporabo bayesovskega sklepanja, 
 		  predpostavlja, da je število vhodnih dreves mnogo večje kot število 
 		  taksonomskih enot~\cite{hashcs}.
 \end{itemize} 
@@ -1606,7 +1607,7 @@ za potrebe uvrstitve devetih prej še neobjavljenih sekvenc puščavskih zelenih
 Poleg njih vsebuje še štirinajst znanih puščavskih zelenih alg in 127 taksonomskih 
 enot prisotnih v tekoči vodi, morski vodi ali tleh. Drevesa so bila zgrajena s 
 pomočjo programa MrBayes z uporabo evolucijskega modela GTR. Poravnane sekvence, 
-ki so bile vhod v metodo Bayesove inference, so bile dolge 1651 baznih parov~\cite{taxa150}.
+ki so bile vhod v metodo bayesovskega sklepanja, so bile dolge 1651 baznih parov~\cite{taxa150}.
 
 \begin{table}[h!]
 	\begin{center}
@@ -1785,7 +1786,7 @@ kjer na težave s časom izvajanja ne bi smeli naleteti.
 
 \chapter{Zaključek}
 Najpomembnejši rezultat dela je zagotovo prva znana implementacija konsenzne metode
-asimetričnega srednjega drevesa v programski paket Biopython. Čeprav je računska 
+asimetričnega srednjega drevesa v programskem paketu Biopython. Čeprav je računska 
 kompleksnost metode v splošnem eksponentna (sliki~\ref{img-eval-timing-trees} 
 in~\ref{img-eval-timing-taxons}), kar je nezaželeno, in se problemi s
 časom izvajanja za natančno metodo pojavijo hitro, ima uporabnik možnost namestitve 
@@ -1799,8 +1800,8 @@ aproksimacijske metode je, kot smo pokazali tudi eksperimentalno, odvisna
 predvsem od lastnosti dreves v vhodni množici. 
 
 Kot smo pokazali na štirih vhodnih množicah, asimetrično srednje drevo ni nujno 
-tisto, ki drevesa vhodne množice glede na Robinson-Fouldsovo mero povzema 
-najbolje. Tako kot pri izbiri aproksimacijske metode, tudi tukaj velja, da 
+tisto, ki drevesa vhodne množice povzema 
+najbolje glede na Robinson-Fouldsovo mero. Tako kot pri izbiri aproksimacijske metode tudi tukaj velja, da 
 je izbira konsenzne metode odvisna predvsem od predhodnega poznavanja lastnosti 
 dreves vhodne množice. Če ta vsebujejo veliko število nekompatibilnih parov 
 poddreves ali veliko poddreves ni večinsko zastopanih, je izbira metode 
@@ -1813,8 +1814,8 @@ informacij o evolucijski zgodovini.
 Tega sicer ne moremo trditi za obe aproksimacijski metodi. Metoda z izračunom 
 največjega ujemanja je bila po razrešenosti v nekaterih primerih primerljiva zgolj 
 s striktnim konsenznim drevesom, v drugih pa je bila nekoliko boljša od Adamsovega 
-konsenznega drevesa. Metoda z izračunom drevesa iz dveh vhodnih dreves je ob 
-primerljivi razrešenosti glede na večinsko konsenzno drevo običajno proizvedla drevo,
+konsenznega drevesa. Metoda z izračunom drevesa iz dveh vhodnih dreves je, ob 
+primerljivi razrešenosti glede na večinsko konsenzno drevo, običajno proizvedla drevo,
 ki se slabše ujema z vhodnimi drevesi. 
 
 Možnosti za izboljšave vidimo predvsem pri aproksimacijskih algoritmih. Nad drevesi,
@@ -1823,7 +1824,7 @@ izračunali konsenzna drevesa in izbrali najboljšega. Poleg tega bi lahko
 izračun asimetričnega srednjega drevesa za vsak par vhodnih dreves opravili vzporedno. 
 
 Eksponentni čas za konstrukcijo asimetričnega srednjega drevesa bi lahko zmanjšali z 
-uporabo katerega izmed aproksimacijskih algoritmov za iskanje največje neodvisne množice.
+uporabo aproksimacijskih algoritmov za iskanje največje neodvisne množice.
 Prav tako bi bilo zanimivo določiti lastnosti množice vhodnih dreves, za katero bi 
 metoda asimetričnega srednjega drevesa dala boljše rezultate od ostalih konsenznih metod.
 
